@@ -2,6 +2,61 @@
 <html>
 <head>
     <title>Home</title>
+    <style>
+        /* Add some basic styles */
+        body {
+            background-color: #ADD8E6; /* Light blue background */
+            font-family: Arial, sans-serif; /* Change the font */
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        nav li {
+            float: left;
+        }
+
+        nav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        nav li a:hover {
+            background-color: #111;
+        }
+
+        .profile {
+            display: flex;
+            padding: 20px;
+        }
+
+        .profile img {
+            margin-right: 20px;
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+        }
+
+        .about-me {
+            max-width: 600px;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -18,6 +73,22 @@
     </header>
     <main>
         <h1>Welcome to Home Page</h1>
+        <section class="profile">
+            <img src="profile_image.jpeg" alt="Profile Image">
+            <div class="about-me">
+                <h2>About Me</h2>
+<p>
+        Fueled by a deep-seated passion for unraveling the intricate mathematics that underpins learning processes, I am committed to constructing high-impact AI applications that can revolutionize how we approach problems and make decisions. I am equally intrigued by the profound study of medicines and their transformative effects on human biology, always aiming to contribute to the enhancement of both physical and mental health.
+    </p>
+    <p>
+        Beyond my professional pursuits, I find joy and inspiration in the realm of poetry, literature, and music. These art forms enrich my perspective, infusing creativity into my work and offering respite and rejuvenation in my leisure time.
+    </p>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/goswamianjan/">LinkedIn</a>
+                    <a href="https://twitter.com/anjangoswami">Twitter</a>
+                </div>
+            </div>
+        </section>
         <!-- Rest of the content goes here -->
     </main>
 </body>

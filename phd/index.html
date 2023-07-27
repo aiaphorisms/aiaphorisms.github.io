@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PhD</title>
+    <style>
+        body {
+            background-color: #D3D3D3; /* Light grey background */
+            font-family: Arial, sans-serif; /* Change the font */
+            color: black; /* Black text */
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        nav li {
+            float: left;
+        }
+
+        nav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        nav li a:hover {
+            background-color: #111;
+        }
+
+        .phd-info {
+            padding: 20px;
+        }
+
+        .abstract {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../projects/index.html">Projects</a></li>
+                <li><a href="../publication/index.html">Publications</a></li>
+                <li><a href="../resume/index.html">Resume</a></li>
+                <li><a href="index.html">PhD</a></li>
+                <li><a href="../blog/index.html">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>PhD</h1>
+        <section class="phd-info">
+            <h2>Machine-Learned Ranking Algorithms for E-commerce Search and Recommendation Applications</h2>
+            <h3>Abstract</h3>
+            <p class="abstract">
+<p>
+Search is one of the most critical functionalities of an e-commerce site. Almost every e- commerce site provides a search box. A customer expresses her intent about a product or a category of products in the form of one or more keywords and enters those keywords in the search box. The underlying search engine for an e-commerce site takes those keywords as input and formulate a search query. It subsequently queries its index and retrieves a ranked list of relevant items. The customer then goes through these from the top one after another. She then can click one of those items and lands on its product view page. That page contains detail information about the product. The customer then can add that product to her shopping cart and can purchase it. The internals of an e-commerce search engine is mostly similar to a web search engine. However, the ranking problem for an e-commerce search engine has several unique challenges. In this thesis we unfold the complexities of designing, optimizing and evaluating an e-commerce search engine.
+
+</p>
+
+<p>
+We begin with the aspect of the evaluation of the ranking algorithms for an e-commerce search and provide guidelines for conducting online randomized controlled experiments on a large e-commerce site. In this regard, we discuss managing biases, understanding of the metrics and the population, and the use of right statistical tests.
+</p>
+
+<p>
+Second, we define a formal framework for designing learning to rank (LTR) algorithms for e- commerce search optimizing the ranking for relevance, revenue, and discovery. We define a measure for discovery and describe the importance of that for an e-commerce business.
+
+We then propose a practical algorithm for integrating a discovery mechanism with trained learning to rank model. We also describe an approach for evaluating ranking algorithms involving exploration using offline simulation and counterfactuals. We furthermore, design variants of exploration algorithms using our formal framework. We show that a class of such explore algorithms can be designed to be monotonic sub-modular. It is thus possible to construct simple greedy algorithms with theoretical guarantees that maximize the exploration minimizing the loss of relevance and revenue. We conduct simulation studies following our proposed evaluation methodologies to show the effectiveness of our algorithms.
+</p>
+
+<p>
+Third, we address the problem of incorporating diversity in e-commerce search. We design a knapsack based semi-bandit optimization algorithm for simultaneously learning to diversify and maximizing the revenue. We show that the regret of the algorithm is similar to an existing algorithm for learning to diversify web search although our algorithm is much more straightforward and efficient to realize. We further show that improving diversity in e- commerce search increases the median customer lifetime value (CLV) for an e-commerce business.
+</p>
+
+<p>
+Fourth, we address the problem of multi-objective learning to rank. We use the LambdaMart algorithm to realize our multi-objective algorithms. LambdaMart algorithm is widely used in Industry, won some recent ``learning to rank'' challenges. The authors of the algorithm showed that it could empirically optimize any non-smooth information retrieval ranking metrics such as normalized discounted cumulative gradient (NDCG). It is thus an efficient choice for designing multi-objective learning to rank algorithm. We also extend the physics- based intuition behind the design of lambda gradients to construct a dynamic update for one  
+of the algorithms. We, furthermore, design a second more general algorithm that maintains a fixed number of solutions at each iteration and use a utility function given by a decision maker for that. The algorithm selects the best path that maximizes the NDCG scores of multiple objectives based on the preferences used in the utility function once it completes all the iterations to generate the model. This algorithm can achieve Pareto optimality with the given utility function if such a solution exists.
+</p>
+
+<p>
+Fifth, we address the problem of quantification and visualization of the excess supply and unmet demand using the contents of the queries and items. We show the impact of such content gap in search experience. We quantify the content gap defining a distance between the topic distribution of text of the items and the queries. E-commerce companies can use the insight obtained from such topical content gaps in formulating strategies for demand generation and assortment planning.
+Finally, we consider the problem of optimization of ranking for the recommender systems for two-sided marketplaces by constructing a two-layer based learning architecture. We show that such two-layer models work better compared to using one model.
+</p>
+
+<p>
+Although this thesis focuses on the problems in e-commerce search, the algorithms that we developed are general and can have applications in many other domains. We expect to see this thesis serves as a guideline for several new directions of research in information retrieval and machine learning. Notably, we believe this thesis can propel the research for the  
+problems that require integrating online learning with learning to rank, multi-objective learning to rank and regression algorithms, variants of application-specific multi-armed bandit algorithms, and search and recommendation applications for any marketplaces.
+</p>
+            </p>
+        </section>
+    </main>
+</body>
+</html>
