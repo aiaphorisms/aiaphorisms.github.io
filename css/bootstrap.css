@@ -1,0 +1,125 @@
+/**********************************
+  GLOBAL & LAYOUT
+**********************************/
+/* Make sure body has a subtle background and decent spacing */
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Limit max-width for main container sections */
+.narrow-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/**********************************
+  NAVBAR
+**********************************/
+.navbar-dark .navbar-brand {
+  font-weight: bold;
+}
+.navbar-nav .nav-link {
+  margin-right: 1rem;
+}
+.navbar-nav .nav-link:hover {
+  text-decoration: underline;
+}
+
+/**********************************
+  HERO SECTION
+**********************************/
+.hero-section {
+  background-color: #ffffff;
+  padding: 60px 0 30px 0;
+  border-bottom: 1px solid #ddd;
+}
+.hero-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.profile-img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #cccccc;
+}
+.tagline {
+  color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+/**********************************
+  CONTENT SECTIONS
+**********************************/
+.content-section {
+  background-color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.section-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/**********************************
+  ABOUT SECTION
+**********************************/
+.about-section {
+  margin-bottom: 10px;
+}
+.about-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/**********************************
+  SIGNATURE BOX
+**********************************/
+.signature {
+  background-color: #f8f9fa;
+  padding: 10px 15px;
+  margin-top: 20px;
+  border-left: 4px solid #007bff;
+  font-family: monospace;
+  color: #555;
+}
+
+/**********************************
+  FOOTER
+**********************************/
+.footer {
+  background-color: #343a40; /* dark grey from Bootstrap */
+  color: #eee;
+  padding: 20px 0;
+  margin-top: 20px;
+}
+.footer a {
+  color: #fff;
+  text-decoration: underline;
+}
+.footer a:hover {
+  text-decoration: none;
+}
+
+/**********************************
+  MEDIA QUERIES
+**********************************/
+@media (max-width: 575.98px) {
+  .hero-section {
+    padding: 40px 0 20px 0;
+  }
+  .tagline {
+    font-size: 1rem;
+  }
+}
+

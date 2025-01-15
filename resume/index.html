@@ -1,63 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Resume</title>
-    <style>
-        body {
-            background-color: #F5F5F5; /* Maroon background */
-            font-family: Arial, sans-serif; /* Change the font */
-            color: black; /* Black text */
-        }
+  <meta charset="utf-8" />
+  <title>Resume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-        }
+  <!-- Bootstrap 3.x (CDN example) -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
 
-        nav li {
-            float: left;
-        }
+  <!-- Google Font: Open Sans -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 
-        nav li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
+  <!-- Your custom styles -->
+  <link rel="stylesheet" href="../css/styles.css" />
 
-        nav li a:hover {
-            background-color: #111;
-        }
-
-        .resume-link {
-            padding: 20px;
-        }
-    </style>
+  <style>
+    body {
+      background-color: #D3D3D3;
+      font-family: 'Open Sans', Arial, sans-serif;
+      color: black;
+      font-size: 16px; /* Base font size */
+    }
+    /* Remove any specific styling for .abstract if not needed */
+    .abstract {
+      font-family: inherit; /* Inherits Open Sans from body */
+      line-height: 1.6;
+    }
+    /* Additional styles for resume-specific sections can go here */
+  </style>
 </head>
+
 <body>
 <header>
-        <nav>
-            <ul>
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="../projects/index.html">Projects</a></li>
-                <li><a href="../publication/agpapers.html">Publications</a></li>
-                <li><a href="index.html">Resume</a></li>
-                <li><a href="../phd/index.html">PhD</a></li>
-                <li><a href="../blog/index.html">Blog</a></li>
-            </ul>
-        </nav>
-    </header>
+        <!-- Placeholder for Navigation Bar -->
+        <div id="nav-placeholder"></div>
+</header>
+<main>
+    <h1>Resume</h1>
+    <section class="resume-link">
+        <p>Please see my resume versions below:</p>
+        <ul>
+            <li>
+                <a href="anjangoswami2025.pdf" target="_blank">
+                    Long Resume (PDF)
+                </a>
+            </li>
+            <li>
+                <a href="anjangoswami_onepage.pdf" target="_blank">
+                    Short One-Page Resume (PDF)
+                </a>
+            </li>
+        </ul>
+    </section>
+</main>
+<!-- jQuery & Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>          
+    <!-- Script to load the navigation bar -->
+    <script>
+        $(function(){
+          $("#nav-placeholder").load("../includes/nav.html", function(response, status, xhr) {              
+            if(status === "error") {
+              console.error("Error loading navigation:", xhr.status, xhr.statusText);
+            }
+          });
+        });
+    </script>
 
-    <main>
-        <h1>Resume</h1>
-        <section class="resume-link">
-            <p>Please see my resume in <a href="anjan_goswami_short.pdf">PDF</a>.</p>
-        </section>
-    </main>
 </body>
 </html>
 

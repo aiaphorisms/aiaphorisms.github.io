@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book Reviews</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header>
+    <div id="nav-placeholder"></div>
+  </header>
+  <main class="container">
+    <h1>Book Summaries and Reviews</h1>
+    <!-- List of book reviews goes here -->
+    <ul>
+                <li>
+                    <a href="random/SummaryOutLive.pdf">Outlive by Dr. Peter Attia</a>
+                    <p>A concise summary of Peter Attia's book 'Outlive,' offering insights on building a healthier life.</p>
+                </li>
+                <li>
+                    <a href="random/AtomicHabit.pdf">Atomic Habits by James Clear</a>
+                    <p>A brief summary of James Clear's book 'Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones.'</p>
+                </li>
+                <li>
+                    <a href="random/Lifespan.pdf">Lifespan by David Sinclair</a>
+                    <p>A summary of David Sinclair's book 'Lifespan.'</p>
+                </li>
+                <li>
+                    <a href="random/FiveDysfunctions.pdf">The Five Dysfunctions of a Team</a>
+                    <p>Summary points from an interesting book on management practices.</p>
+                </li>
+            </ul>
+  </main>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+    $(function(){
+      $("#nav-placeholder").load("../includes/nav.html", function(response, status, xhr) {
+        if(status === "error") {
+          console.error("Error loading navigation:", xhr.status, xhr.statusText);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

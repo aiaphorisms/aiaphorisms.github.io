@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diverse Essays</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header>
+    <div id="nav-placeholder"></div>
+  </header>
+  <main class="container">
+    <h1>Diverse Essays</h1>
+    <!-- List of diverse essays goes here -->
+    <ul>
+                <li>
+                    <a href="random/MyFitness.pdf">An Intense Fitness Routine</a>
+                    <p>I've set up a fitness routine for those truly dedicated to boosting their strength and fitness.</p>
+                </li>
+                <li>
+                    <a href="random/Apsara.pdf">Apsara: The Dancer</a>
+                    <p>An essay about Apsaras in Hindu Mythology.</p>
+                </li>
+                <li>
+                    <a href="random/SocialPlatforms.pdf">The Perils of Social Platforms</a>
+                    <p>An essay about the problems arising due to the emergence of social platforms.</p>
+                </li>
+                <li>
+                    <a href="random/musicmood.pdf">Musings on Music and Meaning</a>
+                    <p>An emotional exploration from listening to music and the purpose of life.</p>
+                </li>
+                <li>
+                    <a href="random/socialmedia.pdf">Why Social Media is Bad for Health</a>
+                    <p>An attempt to mathematically show why social media is bad for health.</p>
+                </li>
+            </ul>
+
+  </main>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+    $(function(){
+      $("#nav-placeholder").load("../includes/nav.html", function(response, status, xhr) {
+        if(status === "error") {
+          console.error("Error loading navigation:", xhr.status, xhr.statusText);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

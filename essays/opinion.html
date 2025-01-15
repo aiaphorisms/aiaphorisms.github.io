@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Opinion Pieces</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header>
+    <div id="nav-placeholder"></div>
+  </header>
+  <main class="container">
+    <h1>Opinion Pieces </h1>
+    <!-- List of opinion pieces goes here -->
+    <ul>
+                <li>
+                    <a href="random/ReligionAndWarfare.pdf">Astrology and Warfare</a>
+                    <p>An opinion piece delving into the influence of Astrology on warfare, highlighting contrasts between Hinduism and Islam.</p>
+                </li>
+                <li>
+                    <a href="random/WarAndGlory.pdf">Does War Truly Bestow Glory?</a>
+                    <p>My opinion about glorification of war in popular culture.</p>
+                </li>
+                <li>
+                    <a href="random/HungryNation.pdf">On Hungry Nation, Famines and India</a>
+                    <p>An analysis of the 1943 Bengal Famine and its impact on colonial rulers.</p>
+                </li>
+                <li>
+                    <a href="random/DecisionMakingDemocracy.pdf">The Myth of Democratic Decision-Making</a>
+                    <p>Challenges the democratization of decision-making in tech companies and explores visionary leadership.</p>
+                </li>
+                <li>
+                    <a href="random/SiliconValleyBloat.pdf">Silicon Valley Bloat</a>
+                    <p>An opinionated piece on recent trends in Silicon Valley culture.</p>
+                </li>
+                <li>
+                    <a href="random/TechnologyInIndia.pdf">China vs India Technology Strategy</a>
+                    <p>An analysis of China's rapid technological progress and India's slower growth.</p>
+                </li>
+                <li>
+                    <a href="random/IndiaProblems.pdf">India's Economic Growth Challenges</a>
+                    <p>Key challenges hindering India's economic growth with comparisons to China and Singapore.</p>
+                </li>
+                <li>
+                    <a href="random/OpedsDurga.pdf">Reimagining Durga</a>
+                    <p>An opinion advocating for an authentic approach to worshipping Ma Durga during Durga Puja.</p>
+                </li>
+            </ul>
+
+
+  </main>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+    $(function(){
+      $("#nav-placeholder").load("../includes/nav.html", function(response, status, xhr) {
+        if(status === "error") {
+          console.error("Error loading navigation:", xhr.status, xhr.statusText);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

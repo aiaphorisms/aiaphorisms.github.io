@@ -1,0 +1,103 @@
+/* Basic body styling */
+body {
+  background-image: url("");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #d3d3d3; /* light gray */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar margin fix */
+.navbar {
+  margin-bottom: 0;
+}
+
+/* Custom Navbar Styles */
+.navbar-inverse {
+  min-height: 60px; /* Increase navbar height for more space */
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 16px;
+  /* background-color: white;*/   /* White background for tabs */
+  /* color: #333; */               /* Dark text color */
+ /* border-radius: 4px;
+  margin-right: 5px;
+  margin-top: 8px; */ /* Add top margin to separate from navbar top */
+  /* margin-bottom: 8px; */ /* Add bottom margin for spacing */ 
+
+}
+
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  background-color: #f0f0f0; /* Slightly darker on hover/focus */
+  color: #000;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+  background-color: #ddd;
+  color: #000;
+}
+
+/* Top page title */
+.page-title {
+  margin-top: 20px;
+  text-align: left;
+}
+
+/* Profile Section Layout */
+.profile-section {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+/* Circular Image */
+.profile-img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.about-me {
+  margin: 20px 0;
+}
+.about-me h2 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+.about-me p {
+  font-size: 1em;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+
+/* Contact / Social links block under image */
+.contact-links p {
+  margin: 10px 0;
+}
+.contact-links a {
+  color: #333;
+  text-decoration: none;
+}
+.contact-links a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive: stack columns on smaller screens */
+@media (max-width: 767px) {
+  .profile-img {
+    margin-bottom: 10px;
+  }
+}
+
