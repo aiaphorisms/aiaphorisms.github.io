@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Open Source | SmartInfer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+        content="Curated open-source projects in reasoning systems, evaluation, and applied AI infrastructure." />
+
+  <!-- Bootstrap 3.x -->
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <header>
+    <div id="nav-placeholder"></div>
+  </header>
+
+  <div class="container">
+    <h1 class="page-title">Open Source</h1>
+
+    <p>
+      A small, curated set of open-source projects. I keep this page intentionally focused on
+      work that reflects how I think about reasoning, evaluation, and system design, rather than
+      maintaining an exhaustive list.
+    </p>
+
+    <!-- PROJECTS -->
+    <h3>Selected projects</h3>
+
+    <ul>
+      <li>
+        <strong>Thinker</strong><br />
+        <a href="https://github.com/smartinfer/thinker"
+           target="_blank" rel="noopener">
+          https://github.com/smartinfer/thinker
+        </a>
+        <p class="text-muted" style="margin-top: 5px;">
+          A unified, minimal interface for accessing large language models via a registry-driven
+          router and a declarative request language (ThinkerQL). The system provides schema-based
+          contracts, secure credential handling, comprehensive testing, and real-time observability.
+          The current implementation supports OpenAI and local Ollama models, and is designed to
+          explore disciplined access patterns, routing, and evaluation in multi-model LLM systems.
+        </p>
+      </li>
+
+      <li style="margin-top: 15px;">
+        <strong>Sudoku Solver (Exact Cover / DLX)</strong><br />
+        <a href="https://github.com/Dhi-Mahi/Sudoku-Solver"
+           target="_blank" rel="noopener">
+          https://github.com/Dhi-Mahi/Sudoku-Solver
+        </a>
+        <p class="text-muted" style="margin-top: 5px;">
+          Blazingly fast Sudoku solvers for 4×4, 6×6, and 9×9 grids implemented in pure C99 using
+          Donald Knuth’s Algorithm X with the Dancing Links (DLX) technique. Each solver models Sudoku
+          as an exact cover problem and is optimized for its grid size with zero runtime overhead.
+          This project is used as a verifier and reasoning playground for studying constraint
+          satisfaction, correctness, and evaluation in reinforcement learning and reasoning systems.
+        </p>
+      </li>
+    </ul>
+
+    <!-- FUTURE NOTE -->
+    <p class="text-muted" style="margin-top: 20px;">
+      I maintain additional private repositories related to production systems, evaluation
+      frameworks, and applied AI infrastructure. Some of these may be open-sourced selectively
+      over time.
+    </p>
+  </div>
+
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+    $(function(){
+      $("#nav-placeholder").load("includes/nav.html", function(response, status, xhr) {
+        if(status === "error") {
+          console.error("Error loading navigation:", xhr.status, xhr.statusText);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
