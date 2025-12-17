@@ -13,6 +13,36 @@
 
   <!-- Site styles -->
   <link rel="stylesheet" href="css/styles.css" />
+
+  <style>
+    /* Readability layer on top of existing site styles */
+    .container { max-width: 960px; }
+    body { line-height: 1.6; }
+    .page-title { margin-top: 26px; margin-bottom: 18px; }
+    h2 { margin-top: 0; margin-bottom: 10px; font-weight: 600; }
+    h3 { margin-top: 26px; margin-bottom: 10px; font-weight: 600; }
+    p { margin: 0 0 12px; }
+    .consulting-hero {
+      padding: 14px 16px;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 8px;
+      margin-bottom: 18px;
+      background: rgba(0,0,0,0.02);
+    }
+    .lead-muted { color: #666; margin-top: 6px; }
+    .section-intro { color: #444; }
+    ul.tight { margin-top: 6px; margin-bottom: 14px; padding-left: 18px; }
+    ul.tight li { margin-bottom: 6px; }
+    ol.steps { margin-top: 8px; margin-bottom: 14px; padding-left: 20px; }
+    ol.steps li { margin-bottom: 10px; }
+    .panel-compact .panel-heading { background: rgba(0,0,0,0.03); }
+    .panel-compact .panel-body { padding: 12px 14px; }
+    @media (max-width: 767px) {
+      .consulting-hero { padding: 12px; }
+      .container { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+
 </head>
 
 <body>
@@ -25,160 +55,110 @@
 
     <h1 class="page-title">Consulting</h1>
 
-    <h3>When applied AI systems fail, they fail quietly — until they don’t.</h3>
-    <p>
-      Across large organizations, AI systems are being pushed into production without clear quality gates,
-      ownership, or failure criteria. Early demos succeed; real-world behavior degrades. Costs rise faster
-      than value. When issues surface, decisions are already difficult to unwind.
-    </p>
-    <p>
-      I work with leadership teams when these risks matter — and when internal teams can’t surface the full
-      technical and organizational reality fast enough.
-    </p>
+    <div class="consulting-hero">
+      <h2>AI Product Architecture &amp; Implementation Critical Review</h2>
+      <p>
+        I support executive teams with <strong>critical reviews of AI product architecture and implementation</strong>,
+        focusing on whether systems are structurally sound, scalable, and controllable in production.
+      </p>
+      <p class="lead-muted">
+        This work is designed for organizations where AI products are already live or nearing deployment, and where
+        near-term decisions have long-term technical, financial, or organizational consequences.
+      </p>
+    </div>
 
-    <h3>Operating level and focus</h3>
-    <p>
-      I work directly with C-level executives and senior technical leaders as an <strong>independent partner</strong>
-      on decision-critical AI systems.
-    </p>
-    <p>
-      Engagements typically involve systems that are already deployed (or about to be), where decisions made in
-      the next few months will have lasting technical, financial, or reputational consequences. My role is to
-      provide clarity where uncertainty, optimism, or organizational structure obscure risk.
-    </p>
-
-    <h3>How I work</h3>
-    <p>
-      I take on a small number of engagements each year, focused on <strong>judgment and decision clarity</strong>,
-      not staff augmentation.
-    </p>
-    <p>My work combines:</p>
-    <ul>
-      <li>independent technical assessment</li>
-      <li>explicit recommendations grounded in production reality</li>
-      <li>optional architectural oversight during execution, when requested</li>
-    </ul>
-    <p>
-      I am often brought in when leadership needs an external technical partner who can say what internal teams
-      cannot — clearly, constructively, and early enough to matter.
-    </p>
-    <p class="text-muted">
-      If I believe an engagement is unlikely to deliver meaningful outcomes, I will say so upfront.
-    </p>
-
-    <h3>Typical failure patterns I’m brought in to assess</h3>
-    <p>Engagements often start when one or more of the following is true:</p>
-    <ul>
-      <li><strong>AI systems demo well but degrade in real usage.</strong> Early success masks brittleness, edge cases, and silent quality regressions that only appear at scale.</li>
-      <li><strong>Model choice has become a source of anxiety rather than strategy.</strong> Teams debate GPT vs. Claude vs. open-source models without clarity on tradeoffs, lock-in risk, or what (if anything) constitutes a defensible moat when the model itself is not owned.</li>
-      <li><strong>Model and infrastructure costs are growing faster than business value.</strong> Spend increases are justified incrementally, but there is no clear view of marginal return, long-term sustainability, or exit options.</li>
-      <li><strong>No clear ownership exists for AI failures or regressions.</strong> When something breaks, responsibility diffuses across research, engineering, product, and platform teams.</li>
-      <li><strong>Leadership suspects risk but can’t prove where it lies.</strong> Concerns are discussed informally, but there is no concrete mechanism to surface, measure, or prioritize failure modes.</li>
-      <li><strong>Teams are betting heavily on foundation models without rollback or kill criteria.</strong> Architectural decisions are treated as defaults rather than hypotheses, making reversal politically and technically difficult.</li>
-      <li><strong>Prior attempts have produced tools, but not confidence.</strong> Dashboards, pipelines, and prototypes exist, yet leadership still lacks trust in system behavior or decision readiness.</li>
+    <h3>Situations where this review is relevant</h3>
+    <p class="section-intro">Engagements typically arise when:</p>
+    <ul class="tight">
+      <li>AI systems perform well in demonstrations but show instability, drift, or degradation in production.</li>
+      <li>Model strategy (proprietary, third-party, or open-source) lacks clarity on tradeoffs, defensibility, or long-term control.</li>
+      <li>AI-related costs are increasing without proportional business impact.</li>
+      <li>Accountability for quality, regressions, or failures is unclear.</li>
+      <li>Leadership perceives elevated risk but lacks a fact-based view of where it originates.</li>
+      <li>Architectural choices have become implicit defaults rather than explicit decisions.</li>
+      <li>Existing metrics and dashboards do not support confident go / pause / rollback decisions.</li>
     </ul>
 
-    <h3>How engagements typically unfold</h3>
-    <p>
-      Most engagements follow a clear sequence designed to separate <strong>judgment</strong> from <strong>execution</strong>:
+    <h3>What the review produces</h3>
+    <p class="section-intro">
+      A concise written executive document (memo or white paper) that addresses:
     </p>
-
-    <h4>1. Independent assessment and diagnosis</h4>
-    <p>
-      I spend time with senior engineers, architects, and engineering leadership to understand the system as it actually
-      exists — not how it is described. This includes reviewing architecture, evaluation practices, cost structure,
-      organizational ownership, and delivery constraints.
-    </p>
-
-    <h4>2. Executive recommendations and written guidance</h4>
-    <p>
-      Findings are synthesized into a concise written document (often a technical white paper or executive memo) that outlines:
-    </p>
-    <ul>
-      <li>where risk lies</li>
-      <li>which decisions matter most</li>
-      <li>viable options and tradeoffs</li>
-      <li>what should be stopped, changed, or deferred</li>
+    <ul class="tight">
+      <li>whether the current AI product architecture is fit for purpose,</li>
+      <li>where implementation risk exists, across technology and organization,</li>
+      <li>which decisions require immediate attention and which do not,</li>
+      <li>feasible options, tradeoffs, and exit paths,</li>
+      <li>quality, cost, and rollback criteria required for effective governance,</li>
+      <li>organizational structure and talent constraints affecting execution.</li>
     </ul>
-    <p>
-      This document is designed to support C-level decision-making, not to prescribe implementation prematurely.
+    <p class="lead-muted">
+      The objective is to enable <strong>clear, defensible decisions</strong>.
     </p>
 
-    <h4>3. Optional execution oversight and architectural stewardship</h4>
-    <p>
-      If leadership requests continued involvement, I remain engaged as a technical and architectural advisor during delivery —
-      reviewing designs, pressure-testing assumptions, and ensuring execution stays aligned with the original intent.
-    </p>
-    <p class="text-muted">Ownership and implementation remain with internal teams.</p>
+    <h3>How the work is conducted</h3>
+    <ol class="steps">
+      <li>
+        <strong>Assessment</strong><br />
+        Structured discussions with architects, engineering leadership, and product owners, combined with review of
+        architecture, evaluation practices, cost structure, and ownership.
+      </li>
+      <li>
+        <strong>Critical review</strong><br />
+        Synthesis of findings into a written deliverable intended for C-level decision-making.
+      </li>
+      <li>
+        <strong>Execution stewardship (optional)</strong><br />
+        Continued involvement, if requested, to review designs, test assumptions, and ensure implementation remains aligned
+        with original decisions. Delivery ownership remains with internal teams.
+      </li>
+    </ol>
 
-    <h3>Representative engagement types and outcomes</h3>
     <p>
-      I focus on decision-critical engagements where clarity, not output volume, is the primary goal. Examples include:
-    </p>
-    <ul>
-      <li><strong>Determining whether an AI system is ready to scale</strong> — Establishing objective quality, regression, and failure criteria so leadership can make informed go / pause / rollback decisions.</li>
-      <li><strong>Clarifying model strategy and defensibility</strong> — Assessing reliance on third-party foundation models, identifying where differentiation truly exists, and defining where ownership matters — and where it does not.</li>
-      <li><strong>Resetting cost–quality expectations</strong> — Helping leadership understand the real tradeoffs between model choice, inference strategy, cost, and product behavior, and identifying where spend no longer justifies value.</li>
-      <li><strong>Bridging research effort to business outcomes</strong> — Diagnosing why experimentation is not translating into impact, and restructuring evaluation, ownership, and incentives to align work with measurable results.</li>
-      <li><strong>Exiting unnecessary complexity</strong> — Identifying cases where classical ML, hybrid systems, or simpler architectures outperform foundation-model-centric approaches in reliability, interpretability, or cost.</li>
-      <li><strong>Independent technical diligence</strong> — Providing objective assessments of AI maturity, data quality, infrastructure cost structure, and integration risk for acquisitions or strategic investments — beyond demos and pitch narratives.</li>
-    </ul>
-
-    <h3>Collaboration and access</h3>
-    <p>Effective work requires close collaboration. I typically ask for access to:</p>
-    <ul>
-      <li>senior engineers or architects who understand the system deeply</li>
-      <li>product or platform leaders who can make tradeoffs</li>
-      <li>executives who own outcomes and priorities</li>
-    </ul>
-    <p>
-      I work best with small, high-caliber teams and fast feedback loops. If skill gaps or resourcing issues materially block
-      progress, I raise them early.
+      Where necessary, targeted diagnostics, experiments, or limited proofs-of-concept are conducted to validate assumptions
+      and reduce uncertainty. These activities are used to inform decisions, not to replace delivery teams.
     </p>
 
-    <h3>Boundaries and non-fits</h3>
-    <p>This work is not a good fit for:</p>
-    <ul>
-      <li>staff augmentation or team backfill</li>
-      <li>open-ended exploratory research</li>
-      <li>RFP-driven bake-offs</li>
-      <li>engagements without clear ownership or decision authority</li>
-    </ul>
-    <p>
-      If you are looking for implementation capacity rather than independent technical judgment and stewardship, there are better
-      options than this engagement model.
-    </p>
-
-    <h3>Pricing philosophy</h3>
-    <p>
-      Engagements are fixed-scope and priced based on risk, complexity, and expected impact — not hourly rates.
-    </p>
-    <p>
-      Initial diagnostic phases are scoped explicitly. Follow-on involvement is proposed only when clarity has been established
-      and leadership requests continued support.
-    </p>
-    <p class="text-muted">
-      I do not take on projects unless I believe the expected value justifies the investment.
-    </p>
+    <h3>Scope boundaries</h3>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="panel panel-default panel-compact">
+          <div class="panel-heading"><strong>This work is appropriate when</strong></div>
+          <div class="panel-body">
+            <ul class="tight">
+              <li>there is a clear executive sponsor,</li>
+              <li>decision authority is defined,</li>
+              <li>leadership is prepared to adjust direction based on findings.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-default panel-compact">
+          <div class="panel-heading"><strong>This work is not intended for</strong></div>
+          <div class="panel-body">
+            <ul class="tight">
+              <li>staff augmentation or delivery outsourcing,</li>
+              <li>open-ended exploratory research,</li>
+              <li>vendor-led tool selection,</li>
+              <li>RFP-driven evaluations.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <h3>Contact</h3>
     <p>
-      If you have a focused problem and believe this may be a good fit, email
-      <a href="mailto:anjan@smartinfer.com">anjan@smartinfer.com</a>.
+      For a discussion, email <a href="mailto:anjan@smartinfer.com">anjan@smartinfer.com</a>.
     </p>
-
-    <p>To keep things efficient, it helps to include:</p>
-    <ul>
-      <li>a brief description of the problem</li>
-      <li>why it matters now</li>
-      <li>expected timeline</li>
-      <li>who owns outcomes on your side</li>
-      <li>what happens if this problem is not addressed in the next 6 months</li>
+    <p class="section-intro">To keep things efficient, please include:</p>
+    <ul class="tight">
+      <li>the product or system under consideration,</li>
+      <li>why the review is being initiated now,</li>
+      <li>expected timeframe,</li>
+      <li>decision owner,</li>
+      <li>implications of maintaining the current course for the next six months.</li>
     </ul>
-
-    <p class="text-muted">
-      If it looks like a good fit, I’ll suggest next steps, which may include a short call.
-    </p>
 
   
   </div>
