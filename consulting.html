@@ -21,188 +21,166 @@
   </header>
 
   <div class="container">
+    
+
     <h1 class="page-title">Consulting</h1>
 
-    <!-- AUTHORITY INTRO (short) -->
-<p>
-  I work with leadership teams on high-stakes technical problems in applied AI, evaluation, and
-  large-scale systems—typically when delivery quality, cost, or execution risk matters. I operate
-  at the Principal/Director level, bridging research, production reliability, and measurable business outcomes.
-</p>
-
-    <!-- INTRO -->
+    <h3>When applied AI systems fail, they fail quietly — until they don’t.</h3>
     <p>
-      I take on a small number of consulting engagements each year, focused on delivering
-      concrete improvements in applied AI systems. My work is hands-on and execution-heavy,
-      aimed at teams that need deep technical help, fast iteration, and clear outcomes.
+      Across large organizations, AI systems are being pushed into production without clear quality gates,
+      ownership, or failure criteria. Early demos succeed; real-world behavior degrades. Costs rise faster
+      than value. When issues surface, decisions are already difficult to unwind.
+    </p>
+    <p>
+      I work with leadership teams when these risks matter — and when internal teams can’t surface the full
+      technical and organizational reality fast enough.
     </p>
 
-    <p class="text-muted">
-      Engagements work best when the problem is concrete, the scope is bounded, and success can be defined upfront.
+    <h3>Operating level and focus</h3>
+    <p>
+      I work directly with C-level executives and senior technical leaders as an <strong>independent partner</strong>
+      on decision-critical AI systems.
+    </p>
+    <p>
+      Engagements typically involve systems that are already deployed (or about to be), where decisions made in
+      the next few months will have lasting technical, financial, or reputational consequences. My role is to
+      provide clarity where uncertainty, optimism, or organizational structure obscure risk.
     </p>
 
-    <!-- WELL-SCOPED WORK -->
-    <h3>Examples of well-scoped engagements</h3>
-
+    <h3>How I work</h3>
+    <p>
+      I take on a small number of engagements each year, focused on <strong>judgment and decision clarity</strong>,
+      not staff augmentation.
+    </p>
+    <p>My work combines:</p>
     <ul>
-      <li>
-        <strong>End-to-end evaluation harness for AI products:</strong>
-        designing and implementing a complete evaluation framework to measure quality, regressions,
-        failure modes, and business impact for production AI systems, including LLM-based products.
-      </li>
+      <li>independent technical assessment</li>
+      <li>explicit recommendations grounded in production reality</li>
+      <li>optional architectural oversight during execution, when requested</li>
+    </ul>
+    <p>
+      I am often brought in when leadership needs an external technical partner who can say what internal teams
+      cannot — clearly, constructively, and early enough to matter.
+    </p>
+    <p class="text-muted">
+      If I believe an engagement is unlikely to deliver meaningful outcomes, I will say so upfront.
+    </p>
 
-      <li>
-        <strong>Inference optimization and cost–quality tradeoffs:</strong>
-        improving the cost-benefit profile of deployed models through inference-time optimization,
-        architecture changes, or hybrid systems—without sacrificing product quality.
-      </li>
-
-      <li>
-        <strong>Domain-specific foundation or reasoning models:</strong>
-        building or adapting smaller (&lt;20B parameter) models—LLMs, LRMs, image generation,
-        multimodal, or object-detection models—for a clearly defined domain or task, with a focus
-        on deployability and ownership.
-      </li>
-
-      <li>
-        <strong>Classical ML where it still wins:</strong>
-        designing and deploying traditional models (random forests, gradient-boosted trees,
-        specialized clustering) where they provide superior reliability, interpretability,
-        or cost-performance compared to deep learning alternatives.
-      </li>
-
-      <li>
-        <strong>Agentic AI systems with grounding:</strong>
-        building full agent-based AI products that combine retrieval (RAG), multiple models,
-        and tools—emphasizing observability, failure handling, and long-term maintainability.
-      </li>
-<li>
-  <strong>Technical due diligence for acquisitions or strategic investments:</strong>
-  deep evaluation of AI systems, data pipelines, model maturity, infra cost structure,
-  and engineering risks to assess technical soundness, scalability, and integration
-  feasibility beyond slideware and demos.
-</li>
-
+    <h3>Typical failure patterns I’m brought in to assess</h3>
+    <p>Engagements often start when one or more of the following is true:</p>
+    <ul>
+      <li><strong>AI systems demo well but degrade in real usage.</strong> Early success masks brittleness, edge cases, and silent quality regressions that only appear at scale.</li>
+      <li><strong>Model choice has become a source of anxiety rather than strategy.</strong> Teams debate GPT vs. Claude vs. open-source models without clarity on tradeoffs, lock-in risk, or what (if anything) constitutes a defensible moat when the model itself is not owned.</li>
+      <li><strong>Model and infrastructure costs are growing faster than business value.</strong> Spend increases are justified incrementally, but there is no clear view of marginal return, long-term sustainability, or exit options.</li>
+      <li><strong>No clear ownership exists for AI failures or regressions.</strong> When something breaks, responsibility diffuses across research, engineering, product, and platform teams.</li>
+      <li><strong>Leadership suspects risk but can’t prove where it lies.</strong> Concerns are discussed informally, but there is no concrete mechanism to surface, measure, or prioritize failure modes.</li>
+      <li><strong>Teams are betting heavily on foundation models without rollback or kill criteria.</strong> Architectural decisions are treated as defaults rather than hypotheses, making reversal politically and technically difficult.</li>
+      <li><strong>Prior attempts have produced tools, but not confidence.</strong> Dashboards, pipelines, and prototypes exist, yet leadership still lacks trust in system behavior or decision readiness.</li>
     </ul>
 
-    <!-- ENGAGEMENT MODEL -->
-    <h3>Engagement model and boundaries</h3>
-
+    <h3>How engagements typically unfold</h3>
     <p>
-      To maximize delivery speed and reduce risk, my default approach is to design and implement
-      <strong>standalone, composable components</strong> that integrate cleanly with your existing
-      systems, rather than making invasive changes to production codebases.
+      Most engagements follow a clear sequence designed to separate <strong>judgment</strong> from <strong>execution</strong>:
     </p>
 
+    <h4>1. Independent assessment and diagnosis</h4>
+    <p>
+      I spend time with senior engineers, architects, and engineering leadership to understand the system as it actually
+      exists — not how it is described. This includes reviewing architecture, evaluation practices, cost structure,
+      organizational ownership, and delivery constraints.
+    </p>
+
+    <h4>2. Executive recommendations and written guidance</h4>
+    <p>
+      Findings are synthesized into a concise written document (often a technical white paper or executive memo) that outlines:
+    </p>
     <ul>
-      <li>Minimizes disruption to existing systems and teams</li>
-      <li>Reduces legal and IP entanglement around production code</li>
-      <li>Produces components that are easier to test, reason about, and maintain</li>
+      <li>where risk lies</li>
+      <li>which decisions matter most</li>
+      <li>viable options and tradeoffs</li>
+      <li>what should be stopped, changed, or deferred</li>
+    </ul>
+    <p>
+      This document is designed to support C-level decision-making, not to prescribe implementation prematurely.
+    </p>
+
+    <h4>3. Optional execution oversight and architectural stewardship</h4>
+    <p>
+      If leadership requests continued involvement, I remain engaged as a technical and architectural advisor during delivery —
+      reviewing designs, pressure-testing assumptions, and ensuring execution stays aligned with the original intent.
+    </p>
+    <p class="text-muted">Ownership and implementation remain with internal teams.</p>
+
+    <h3>Representative engagement types and outcomes</h3>
+    <p>
+      I focus on decision-critical engagements where clarity, not output volume, is the primary goal. Examples include:
+    </p>
+    <ul>
+      <li><strong>Determining whether an AI system is ready to scale</strong> — Establishing objective quality, regression, and failure criteria so leadership can make informed go / pause / rollback decisions.</li>
+      <li><strong>Clarifying model strategy and defensibility</strong> — Assessing reliance on third-party foundation models, identifying where differentiation truly exists, and defining where ownership matters — and where it does not.</li>
+      <li><strong>Resetting cost–quality expectations</strong> — Helping leadership understand the real tradeoffs between model choice, inference strategy, cost, and product behavior, and identifying where spend no longer justifies value.</li>
+      <li><strong>Bridging research effort to business outcomes</strong> — Diagnosing why experimentation is not translating into impact, and restructuring evaluation, ownership, and incentives to align work with measurable results.</li>
+      <li><strong>Exiting unnecessary complexity</strong> — Identifying cases where classical ML, hybrid systems, or simpler architectures outperform foundation-model-centric approaches in reliability, interpretability, or cost.</li>
+      <li><strong>Independent technical diligence</strong> — Providing objective assessments of AI maturity, data quality, infrastructure cost structure, and integration risk for acquisitions or strategic investments — beyond demos and pitch narratives.</li>
     </ul>
 
-    <p>
-      When helpful, I will review your current architecture and codebase to assess fit and integration
-      paths. If I believe an engagement is unlikely to deliver meaningful outcomes, I will say so early.
-    </p>
-
-    <!-- COLLABORATION -->
-    <h3>Collaboration</h3>
-
-    <p>
-      Effective work requires close collaboration. I typically ask for regular access to one
-      senior engineer or architect who understands the system well and can answer detailed
-      technical questions. Clear context and fast feedback are essential.
-    </p>
-
-    <p>
-      I prefer working with small, high-caliber teams. If skill gaps or resourcing issues materially
-      block delivery, I will raise them early so they can be addressed.
-    </p>
-
-    <!-- STRUCTURE & PRICING -->
-    <h3>Engagement structure</h3>
-
-    <p>
-      Most engagements begin with a short evaluation phase. This is a focused assessment of
-      the problem space, constraints, existing systems, and delivery options.
-    </p>
-
+    <h3>Collaboration and access</h3>
+    <p>Effective work requires close collaboration. I typically ask for access to:</p>
     <ul>
-      <li><strong>Evaluation phase:</strong> one week (5 days), fixed engagement</li>
-      <li><strong>Typical cost:</strong> $25,000</li>
+      <li>senior engineers or architects who understand the system deeply</li>
+      <li>product or platform leaders who can make tradeoffs</li>
+      <li>executives who own outcomes and priorities</li>
     </ul>
-
     <p>
-      The evaluation phase ensures dedicated time, focus, and continuity. Follow-on work is scoped
-      and priced after this phase, once delivery details and technical complexity are clear.
+      I work best with small, high-caliber teams and fast feedback loops. If skill gaps or resourcing issues materially block
+      progress, I raise them early.
     </p>
 
+    <h3>Boundaries and non-fits</h3>
+    <p>This work is not a good fit for:</p>
+    <ul>
+      <li>staff augmentation or team backfill</li>
+      <li>open-ended exploratory research</li>
+      <li>RFP-driven bake-offs</li>
+      <li>engagements without clear ownership or decision authority</li>
+    </ul>
     <p>
-      Follow-on engagements are typically <strong>10 weeks or longer</strong>, depending on scope and
-      technical difficulty.
+      If you are looking for implementation capacity rather than independent technical judgment and stewardship, there are better
+      options than this engagement model.
     </p>
 
+    <h3>Pricing philosophy</h3>
+    <p>
+      Engagements are fixed-scope and priced based on risk, complexity, and expected impact — not hourly rates.
+    </p>
+    <p>
+      Initial diagnostic phases are scoped explicitly. Follow-on involvement is proposed only when clarity has been established
+      and leadership requests continued support.
+    </p>
     <p class="text-muted">
-      Travel and compute costs, when applicable, are billed separately.
+      I do not take on projects unless I believe the expected value justifies the investment.
     </p>
 
-    <p class="text-muted">
-      I do not take on projects unless I believe I can deliver meaningful results.
-    </p>
-
-    <!-- INTERNATIONAL + LONGER TERM -->
-    <h3>International and longer-term engagements</h3>
-
-    <p>
-      I am open to international engagements and, in some cases, longer-term work (e.g., six to nine months).
-      These engagements work well when the scope, milestones, and success criteria are discussed and agreed upon early.
-    </p>
-
-    <p>
-      For longer engagements, I prioritize clear phase boundaries, periodic checkpoints, and explicit ownership transitions
-      to ensure sustained progress and avoid open-ended commitments.
-    </p>
-
-    <!-- RULES OF ENGAGEMENT -->
-    <h3>Engagement expectations</h3>
-
-    <p>
-      I work most effectively when discussions happen close to decision-making. As a result,
-      I typically engage directly with executives or senior technical leaders who own scope,
-      priorities, and outcomes.
-    </p>
-
-    <p>
-      To keep conversations substantive, I prefer that prospective collaborators review my
-      <a href="/technical_articles/index.html">technical writing</a> or prior work before reaching out.
-    </p>
-
-    <p>
-      I do not participate in technical interviews, coding screens, or exploratory interview-style
-      sessions. If we speak, the conversation is focused on a concrete problem and whether an
-      engagement makes sense.
-    </p>
-
-    <!-- CONTACT -->
     <h3>Contact</h3>
-
     <p>
       If you have a focused problem and believe this may be a good fit, email
       <a href="mailto:anjan@smartinfer.com">anjan@smartinfer.com</a>.
     </p>
 
     <p>To keep things efficient, it helps to include:</p>
-
     <ul>
       <li>a brief description of the problem</li>
       <li>why it matters now</li>
       <li>expected timeline</li>
-      <li>who I would be working with (role/level)</li>
+      <li>who owns outcomes on your side</li>
+      <li>what happens if this problem is not addressed in the next 6 months</li>
     </ul>
 
     <p class="text-muted">
       If it looks like a good fit, I’ll suggest next steps, which may include a short call.
     </p>
+
+  
   </div>
 
   <!-- JS -->
