@@ -13,36 +13,6 @@
 
   <!-- Site styles -->
   <link rel="stylesheet" href="css/styles.css" />
-
-  <style>
-    /* Readability layer on top of existing site styles */
-    .container { max-width: 960px; }
-    body { line-height: 1.6; }
-    .page-title { margin-top: 26px; margin-bottom: 18px; }
-    h2 { margin-top: 0; margin-bottom: 10px; font-weight: 600; }
-    h3 { margin-top: 26px; margin-bottom: 10px; font-weight: 600; }
-    p { margin: 0 0 12px; }
-    .consulting-hero {
-      padding: 14px 16px;
-      border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 8px;
-      margin-bottom: 18px;
-      background: rgba(0,0,0,0.02);
-    }
-    .lead-muted { color: #666; margin-top: 6px; }
-    .section-intro { color: #444; }
-    ul.tight { margin-top: 6px; margin-bottom: 14px; padding-left: 18px; }
-    ul.tight li { margin-bottom: 6px; }
-    ol.steps { margin-top: 8px; margin-bottom: 14px; padding-left: 20px; }
-    ol.steps li { margin-bottom: 10px; }
-    .panel-compact .panel-heading { background: rgba(0,0,0,0.03); }
-    .panel-compact .panel-body { padding: 12px 14px; }
-    @media (max-width: 767px) {
-      .consulting-hero { padding: 12px; }
-      .container { padding-left: 16px; padding-right: 16px; }
-    }
-  </style>
-
 </head>
 
 <body>
@@ -55,110 +25,93 @@
 
     <h1 class="page-title">Consulting</h1>
 
-    <div class="consulting-hero">
-      <h2>AI Product Architecture &amp; Implementation Critical Review</h2>
-      <p>
-        I support executive teams with <strong>critical reviews of AI product architecture and implementation</strong>,
-        focusing on whether systems are structurally sound, scalable, and controllable in production.
-      </p>
-      <p class="lead-muted">
-        This work is designed for organizations where AI products are already live or nearing deployment, and where
-        near-term decisions have long-term technical, financial, or organizational consequences.
-      </p>
-    </div>
-
-    <h3>Situations where this review is relevant</h3>
-    <p class="section-intro">Engagements typically arise when:</p>
-    <ul class="tight">
-      <li>AI systems perform well in demonstrations but show instability, drift, or degradation in production.</li>
-      <li>Model strategy (proprietary, third-party, or open-source) lacks clarity on tradeoffs, defensibility, or long-term control.</li>
-      <li>AI-related costs are increasing without proportional business impact.</li>
-      <li>Accountability for quality, regressions, or failures is unclear.</li>
-      <li>Leadership perceives elevated risk but lacks a fact-based view of where it originates.</li>
-      <li>Architectural choices have become implicit defaults rather than explicit decisions.</li>
-      <li>Existing metrics and dashboards do not support confident go / pause / rollback decisions.</li>
-    </ul>
-
-    <h3>What the review produces</h3>
-    <p class="section-intro">
-      A concise written executive document (memo or white paper) that addresses:
-    </p>
-    <ul class="tight">
-      <li>whether the current AI product architecture is fit for purpose,</li>
-      <li>where implementation risk exists, across technology and organization,</li>
-      <li>which decisions require immediate attention and which do not,</li>
-      <li>feasible options, tradeoffs, and exit paths,</li>
-      <li>quality, cost, and rollback criteria required for effective governance,</li>
-      <li>organizational structure and talent constraints affecting execution.</li>
-    </ul>
-    <p class="lead-muted">
-      The objective is to enable <strong>clear, defensible decisions</strong>.
+    <p>
+      I work with executive teams on <strong>AI product delivery, technical strategy, and operating-model decisions</strong>
+      for production systems. Engagements are selective and scoped around decision-critical outcomes.
     </p>
 
-    <h3>How the work is conducted</h3>
-    <ol class="steps">
+    <p class="text-muted">
+      My role is to diagnose what is blocking progress, translate that into a small set of decisions, and (when requested)
+      provide architectural stewardship through delivery. Internal teams retain ownership.
+    </p>
+
+    <h3>How high-stakes engagements typically start</h3>
+    <p>Engagements usually begin with one of the following situations:</p>
+
+    <ul>
       <li>
-        <strong>Assessment</strong><br />
-        Structured discussions with architects, engineering leadership, and product owners, combined with review of
-        architecture, evaluation practices, cost structure, and ownership.
+        <strong>Launch pressure with a measurable bar:</strong>
+        “We need to ship product X in <em>K</em> months with metric <em>Y</em>, but we don’t know if we can get there—or if we have the right team.”
+        I help establish a credible plan to reach the bar, define the evaluation spine, and de-risk execution.
       </li>
+
       <li>
-        <strong>Critical review</strong><br />
-        Synthesis of findings into a written deliverable intended for C-level decision-making.
+        <strong>Strong hiring, weak ROI:</strong>
+        “We recruited top AI talent, but product impact is flat.” I help identify why effort is not translating into outcomes
+        (evaluation, ownership, product coupling, incentives, or architecture) and what must change.
       </li>
+
       <li>
-        <strong>Execution stewardship (optional)</strong><br />
-        Continued involvement, if requested, to review designs, test assumptions, and ensure implementation remains aligned
-        with original decisions. Delivery ownership remains with internal teams.
+        <strong>GPU spend without throughput:</strong>
+        “We have <em>K</em> GPUs but utilization is low.” I help diagnose the constraint (data, pipelines, training loops,
+        evaluation cadence, deployment friction, or organizational bottlenecks) and recommend actions to raise ROI.
       </li>
-    </ol>
+
+      <li>
+        <strong>Org design for applied science:</strong>
+        “We have a VP Engineering and VP Product—how should science be set up, and what candidates do we need?”
+        I help define the operating model, interfaces, and hiring profile that makes execution viable.
+      </li>
+
+      <li>
+        <strong>Model strategy and defensibility:</strong>
+        “We don’t own the model—what is our moat?” I help clarify where differentiation can realistically live
+        (data, workflows, distribution, evaluation, systems, UX, or domain-specific assets) and how to avoid vendor panic.
+      </li>
+
+      <li>
+        <strong>Agentic platform ambition:</strong>
+        “We want to become an agentic AI platform.” I help assess feasibility, define the platform boundary, specify grounding,
+        observability, and safety requirements, and identify the minimal architecture that can scale.
+      </li>
+    </ul>
+
+    <h3>Engagement structure</h3>
+    <p>
+      Most work begins with a short assessment phase based on structured discussions with architects, engineering leadership,
+      and product owners, plus review of architecture, evaluation practices, cost structure, and ownership.
+    </p>
 
     <p>
-      Where necessary, targeted diagnostics, experiments, or limited proofs-of-concept are conducted to validate assumptions
-      and reduce uncertainty. These activities are used to inform decisions, not to replace delivery teams.
+      The primary deliverable is a concise written executive document (memo or white paper) covering:
+    </p>
+    <ul>
+      <li>where technical and organizational risk actually lies</li>
+      <li>which decisions matter now (and which can wait)</li>
+      <li>options, tradeoffs, and exit paths</li>
+      <li>quality and rollback criteria required for control</li>
+      <li>org and talent constraints that block execution</li>
+    </ul>
+
+    <p class="text-muted">
+      If requested, I remain involved during delivery as an architectural advisor—reviewing designs, pressure-testing assumptions,
+      and keeping execution aligned with the original decisions.
     </p>
 
-    <h3>Scope boundaries</h3>
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="panel panel-default panel-compact">
-          <div class="panel-heading"><strong>This work is appropriate when</strong></div>
-          <div class="panel-body">
-            <ul class="tight">
-              <li>there is a clear executive sponsor,</li>
-              <li>decision authority is defined,</li>
-              <li>leadership is prepared to adjust direction based on findings.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="panel panel-default panel-compact">
-          <div class="panel-heading"><strong>This work is not intended for</strong></div>
-          <div class="panel-body">
-            <ul class="tight">
-              <li>staff augmentation or delivery outsourcing,</li>
-              <li>open-ended exploratory research,</li>
-              <li>vendor-led tool selection,</li>
-              <li>RFP-driven evaluations.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+    <h3>Not a fit</h3>
+    <ul>
+      <li>staff augmentation or team backfill</li>
+      <li>open-ended exploration without decision authority</li>
+      <li>RFP-driven bake-offs</li>
+      <li>engagements where no executive owns outcomes</li>
+    </ul>
 
     <h3>Contact</h3>
     <p>
-      For a discussion, email <a href="mailto:anjan@smartinfer.com">anjan@smartinfer.com</a>.
+      Email <a href="mailto:anjan@smartinfer.com">anjan@smartinfer.com</a>.
+      To keep things efficient, include the system/product under consideration, why this matters now, the expected timeframe,
+      the decision owner, and what happens if nothing changes in the next six months.
     </p>
-    <p class="section-intro">To keep things efficient, please include:</p>
-    <ul class="tight">
-      <li>the product or system under consideration,</li>
-      <li>why the review is being initiated now,</li>
-      <li>expected timeframe,</li>
-      <li>decision owner,</li>
-      <li>implications of maintaining the current course for the next six months.</li>
-    </ul>
 
   
   </div>
