@@ -167,6 +167,14 @@ This technical report maps the GPU design landscape through the engineering cons
 This survey traces image generation from foundational theory through frontier systems, explaining why specific architectures emerged rather than merely cataloging them. It covers the three dominant paradigms—diffusion models (DDPM, latent diffusion, classifier-free guidance), rectified flow (SD3, FLUX), and autoregressive approaches (LlamaGen, VAR, MaskGIT)—alongside critical components: visual tokenizers, text encoders (CLIP, T5, native multimodal), and conditioning mechanisms (ControlNet, IP-Adapter). The analysis spans landmark commercial systems (DALL-E, GPT-Image, Gemini/Nano Banana, Qwen-Image), unified understanding-generation architectures (Chameleon, Emu3, Transfusion), and structured generation via scene graphs and programmatic synthesis. Practical sections cover training infrastructure (LAION-5B, scaling laws, distributed training), evaluation frameworks (FID limitations, T2I-CompBench, GENEVAL, learned preference metrics), and persistent weaknesses—compositional reasoning failures at 15–54% accuracy, hand/text rendering gaps, and the demo-to-deployment reliability chasm. Future projections include the obsolescence of separate "language" and "image" models by 2027, rectified flow displacing DDPM, and mobile deployment becoming viable as distillation reduces generation from 1000 steps to 1–4.
   </p>
 </li>
+<li>
+  <a href="tech/AIMemoryArchitectureLLMs.pdf">
+    AI Memory Architecture for Large Language Models: From Context Windows to Persistent Intelligence
+  </a>
+  <p>
+    This technical survey examines memory architectures for LLMs through the 3D-8Q taxonomy (object, form, time dimensions), mapping how systems store and retrieve knowledge across eight distinct paradigms. It compares neural memory modules—Google's Titans achieving 2M+ token contexts through test-time memorization, Meta's Memory Layers adding 128B parameters with 168% QA accuracy gains—against retrieval-augmented approaches like HippoRAG's graph-based multi-hop reasoning. The analysis covers KV cache optimization (PagedAttention's 96% utilization, FlashAttention's O(N) memory scaling, H2O's 29× throughput via heavy-hitter eviction), GPU memory hierarchies from registers to HBM3e, and NVIDIA's open-source infrastructure (TensorRT-LLM, Dynamo's distributed KV management). Production benchmarks show Mem0 delivering 26% accuracy improvement with 91% latency reduction, while Mooncake's disaggregated architecture processes 100B+ tokens daily—signaling memory has become the critical bottleneck as context windows scale toward millions of tokens.
+  </p>
+</li>
 
         </ul>
   </main>
