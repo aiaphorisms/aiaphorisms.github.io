@@ -176,6 +176,17 @@ This survey traces image generation from foundational theory through frontier sy
   </p>
 </li>
 
+
+<li>
+  <a href="tech/InferenceTimeComputeScaling2026.pdf">
+    Inference-Time Compute Scaling in Large Language Models: A Theoretical Survey
+  </a>
+  <p>
+This survey establishes the formal foundations for understanding why and when test-time compute improves LLM capabilities, grounding the analysis in circuit complexity: transformers with O(1) layers compute TC⁰ functions, while chain-of-thought with T intermediate steps expands expressivity through the hierarchy TC⁰ ⊂ CoT(O(1)) ⊂ CoT(O(log n)) ⊆ CoT(poly(n)) = P. It provides a rigorous taxonomy of inference algorithms—self-consistency, tree-of-thoughts, MCTS—with complexity bounds and failure conditions, plus provable scaling laws showing exponential error decay for knockout tournaments under minimal assumptions (generation probability > 0, pairwise comparison > 0.5). The analysis covers the generation-verification gap that enables scaling, the impossibility of intrinsic self-correction without external feedback (Huang et al. ICLR 2024), and practical implications: optimal compute allocation can substitute for 14× model parameters, but verifier quality remains the fundamental ceiling on scaling benefits.
+  </p>
+</li>
+
+
         </ul>
   </main>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
