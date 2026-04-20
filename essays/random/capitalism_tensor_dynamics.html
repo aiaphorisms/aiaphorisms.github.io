@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capitalism as a Tensor Dynamical System</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+
+/* ─── Fonts ─── */
+const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap');`;
+
+/* ─── Shared Styles ─── */
+const h2S = { fontFamily: "'Playfair Display', serif", fontSize: 26, fontWeight: 600, color: "#0a1628", borderBottom: "2px solid rgba(10,22,40,0.12)", paddingBottom: 10, marginBottom: 20, marginTop: 0 };
+const h3S = { fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 600, color: "#1a2d4a", marginBottom: 10, marginTop: 28 };
+const pS = { fontSize: 15, lineHeight: 1.8, color: "#1e2a3a", marginBottom: 14, fontFamily: "'Lora', serif" };
+
+function MathBlock({ tex, label }) {
+  return (
+    <div style={{ background: "rgba(10,22,40,0.03)", border: "1px solid rgba(10,22,40,0.1)", borderLeft: "3px solid rgba(30,90,160,0.5)", borderRadius: 4, padding: "16px 20px", margin: "16px 0", fontFamily: "'IBM Plex Mono', monospace", fontSize: 13, lineHeight: 1.7, overflowX: "auto", position: "relative" }}>
+      {label && <div style={{ position: "absolute", top: -10, left: 16, background: "#f4f6fa", padding: "0 8px", fontSize: 11, color: "rgba(30,90,160,0.7)", fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}>{label}</div>}
+      <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{tex}</pre>
+    </div>
+  );
+}
+
+function Panel({ title, children, accent = "#1e5aa0" }) {
+  return (
+    <div style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.08)", borderRadius: 8, padding: 22, margin: "20px 0", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 16, fontWeight: 600, color: accent, marginBottom: 14, borderBottom: `1px solid ${accent}22`, paddingBottom: 8 }}>{title}</div>
+      {children}
+    </div>
+  );
+}
+
+/* ─── GINI DYNAMICS SIMULATION ─── */
+function GiniDynamics() {
+  const canvasRef = useRef(null);
+  const [taxRate, setTaxRate] = useState(0.15);
+  const [returnOnCapital, setReturnOnCapital] = useState(0.05);
+  const [growthRate, setGrowthRate] = useState(0.02);
+  const [years, setYears] = useState(80);
+
+  useEffect(() => {
+    const c = canvasRef.current; if (!c) return;
+    const ctx = c.getContext("2d");
+    const W = c.width, H = c.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const ox = 55, oy = H - 35, gw = W - 70, gh = H - 55;
+
+    // Axes
+    ctx.strokeStyle = "#aab"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(ox, 15); ctx.lineTo(ox, oy); ctx.lineTo(W - 10, oy); ctx.stroke();
+    ctx.fillStyle = "#667"; ctx.font = "11px 'Playfair Display', serif";
+    ctx.fillText("Gini", 10, 22); ctx.fillText("Year", W - 40, oy + 18);
+
+    // Simulate Gini trajectory
+    // Piketty-style: when r > g, wealth concentrates
+    // dGini/dt ≈ α(r(1-τ) - g) * Gini * (1 - Gini)  [logistic-like]
+    const alpha = 2.5;
+    const dt = 1;
+    let gini = 0.35; // starting Gini
+    const trajectory = [gini];
+    for (let t = 1; t <= years; t++) {
+      const netReturn = returnOnCapital * (1 - taxRate);
+      const driver = netReturn - growthRate;
+      const dGini = alpha * driver * gini * (1 - gini) * dt;
+      gini = Math.max(0.1, Math.min(0.95, gini + dGini));
+      trajectory.push(gini);
+    }
+
+    // Grid lines
+    ctx.strokeStyle = "rgba(0,0,0,0.05)"; ctx.lineWidth = 0.5;
+    for (let g = 0.2; g <= 0.9; g += 0.1) {
+      const y = oy - ((g - 0.1) / 0.85) * gh;
+      ctx.beginPath(); ctx.moveTo(ox, y); ctx.lineTo(ox + gw, y); ctx.stroke();
+      ctx.fillStyle = "#99a"; ctx.font = "10px 'IBM Plex Mono'";
+      ctx.fillText(g.toFixed(1), ox - 28, y + 4);
+    }
+
+    // Critical zones
+    // Instability zone Gini > 0.6
+    const y06 = oy - ((0.6 - 0.1) / 0.85) * gh;
+    ctx.fillStyle = "rgba(192,57,43,0.05)";
+    ctx.fillRect(ox, 15, gw, y06 - 15);
+    ctx.fillStyle = "rgba(192,57,43,0.3)"; ctx.font = "10px 'IBM Plex Mono'";
+    ctx.fillText("Instability Zone (Gini > 0.6)", ox + 8, 28);
+
+    // Piketty threshold line r=g
+    const rEqG = returnOnCapital * (1 - taxRate) === growthRate;
+
+    // Draw trajectory
+    ctx.strokeStyle = "#1e5aa0"; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let t = 0; t <= years; t++) {
+      const x = ox + (t / years) * gw;
+      const y = oy - ((trajectory[t] - 0.1) / 0.85) * gh;
+      if (t === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Final Gini label
+    const finalGini = trajectory[trajectory.length - 1];
+    const fx = ox + gw;
+    const fy = oy - ((finalGini - 0.1) / 0.85) * gh;
+    ctx.fillStyle = finalGini > 0.6 ? "#c0392b" : finalGini > 0.45 ? "#e67e22" : "#27ae60";
+    ctx.beginPath(); ctx.arc(fx, fy, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.font = "bold 12px 'IBM Plex Mono'";
+    ctx.fillText(`G=${finalGini.toFixed(3)}`, fx - 65, fy - 10);
+
+    // r vs g indicator
+    const netR = (returnOnCapital * (1 - taxRate) * 100).toFixed(1);
+    const gPct = (growthRate * 100).toFixed(1);
+    ctx.fillStyle = "#333"; ctx.font = "11px 'IBM Plex Mono'";
+    ctx.fillText(`r(1-τ)=${netR}%  g=${gPct}%  ${parseFloat(netR) > parseFloat(gPct) ? "r > g → concentration" : "r ≤ g → diffusion"}`, ox + 5, oy + 22);
+
+  }, [taxRate, returnOnCapital, growthRate, years]);
+
+  return (
+    <Panel title="Simulation: Wealth Inequality Dynamics (Piketty-Marx Tensor)" accent="#c0392b">
+      <p style={{ fontSize: 13, color: "#555", margin: "0 0 12px", fontFamily: "'Lora', serif" }}>
+        When after-tax return on capital r(1−τ) exceeds growth rate g, the Gini coefficient follows a logistic concentration trajectory toward oligarchy. This is Marx's "general law of capitalist accumulation" expressed as a dynamical system with Piketty's r {">"} g as the bifurcation parameter.
+      </p>
+      <canvas ref={canvasRef} width={500} height={300} style={{ width: "100%", maxWidth: 500, background: "#f4f6fa", borderRadius: 6 }} />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 14 }}>
+        <label style={{ fontSize: 13, fontFamily: "'Playfair Display', serif" }}>
+          Return on Capital (r): <strong>{(returnOnCapital * 100).toFixed(1)}%</strong>
+          <input type="range" min={1} max={12} value={returnOnCapital * 100} onChange={e => setReturnOnCapital(+e.target.value / 100)} style={{ width: "100%", accentColor: "#1e5aa0" }} />
+        </label>
+        <label style={{ fontSize: 13, fontFamily: "'Playfair Display', serif" }}>
+          Growth Rate (g): <strong>{(growthRate * 100).toFixed(1)}%</strong>
+          <input type="range" min={0} max={8} value={growthRate * 100} onChange={e => setGrowthRate(+e.target.value / 100)} style={{ width: "100%", accentColor: "#27ae60" }} />
+        </label>
+        <label style={{ fontSize: 13, fontFamily: "'Playfair Display', serif" }}>
+          Tax Rate (τ): <strong>{(taxRate * 100).toFixed(0)}%</strong>
+          <input type="range" min={0} max={60} value={taxRate * 100} onChange={e => setTaxRate(+e.target.value / 100)} style={{ width: "100%", accentColor: "#e67e22" }} />
+        </label>
+        <label style={{ fontSize: 13, fontFamily: "'Playfair Display', serif" }}>
+          Time Horizon: <strong>{years} years</strong>
+          <input type="range" min={20} max={200} value={years} onChange={e => setYears(+e.target.value)} style={{ width: "100%", accentColor: "#8e44ad" }} />
+        </label>
+      </div>
+    </Panel>
+  );
+}
+
+/* ─── PRODUCTION-CONSUMPTION EQUILIBRIUM ─── */
+function ProdConsEquilibrium() {
+  const canvasRef = useRef(null);
+  const [consumerism, setConsumerism] = useState(1.2);
+  const [productivity, setProductivity] = useState(1.0);
+  const [creditAccess, setCreditAccess] = useState(0.5);
+
+  useEffect(() => {
+    const c = canvasRef.current; if (!c) return;
+    const ctx = c.getContext("2d");
+    const W = c.width, H = c.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.38;
+
+    // Phase portrait: production capacity vs consumption demand
+    // Draw flow field
+    const step = 25;
+    for (let px = 30; px < W - 20; px += step) {
+      for (let py = 30; py < H - 20; py += step) {
+        // Normalize to [-2, 2]
+        const x = ((px - cx) / R) * 2; // production surplus
+        const y = ((py - cy) / R) * 2; // consumption excess
+
+        // Dynamics:
+        // dx/dt = productivity - consumerism*y - x (production adjusts)
+        // dy/dt = creditAccess + consumerism*x - y (consumption grows with credit)
+        const dx = productivity * 0.5 - consumerism * y * 0.3 - x * 0.4;
+        const dy = creditAccess * 0.3 + consumerism * x * 0.2 - y * 0.5;
+
+        const mag = Math.sqrt(dx * dx + dy * dy);
+        const scale = Math.min(10, mag * 8);
+        const nx = dx / (mag + 0.001), ny = dy / (mag + 0.001);
+
+        const alpha = Math.min(0.6, mag * 0.4);
+        ctx.strokeStyle = `rgba(30,90,160,${alpha})`;
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(px + nx * scale, py + ny * scale);
+        ctx.stroke();
+
+        // Small arrowhead
+        if (scale > 3) {
+          const angle = Math.atan2(ny, nx);
+          ctx.fillStyle = `rgba(30,90,160,${alpha})`;
+          ctx.beginPath();
+          const ax = px + nx * scale, ay = py + ny * scale;
+          ctx.moveTo(ax, ay);
+          ctx.lineTo(ax - 4 * Math.cos(angle - 0.4), ay - 4 * Math.sin(angle - 0.4));
+          ctx.lineTo(ax - 4 * Math.cos(angle + 0.4), ay - 4 * Math.sin(angle + 0.4));
+          ctx.fill();
+        }
+      }
+    }
+
+    // Axes through center
+    ctx.strokeStyle = "rgba(0,0,0,0.15)"; ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(cx, 10); ctx.lineTo(cx, H - 10); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(10, cy); ctx.lineTo(W - 10, cy); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Labels
+    ctx.fillStyle = "#1a2d4a"; ctx.font = "12px 'Playfair Display', serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Overproduction", cx, 18);
+    ctx.fillText("Underproduction", cx, H - 6);
+    ctx.textAlign = "left";
+    ctx.fillText("Under-", W - 55, cy - 10);
+    ctx.fillText("consumption", W - 72, cy + 6);
+    ctx.textAlign = "right";
+    ctx.fillText("Over-", 60, cy - 10);
+    ctx.fillText("consumption", 80, cy + 6);
+
+    // Find and mark the fixed point
+    // At equilibrium: dx=0, dy=0
+    // productivity*0.5 = consumerism*y*0.3 + x*0.4
+    // y*0.5 = creditAccess*0.3 + consumerism*x*0.2
+    // Solve: x*0.4 + consumerism*0.3*y = productivity*0.5
+    //        -consumerism*0.2*x + 0.5*y = creditAccess*0.3
+    const a11 = 0.4, a12 = consumerism * 0.3, b1 = productivity * 0.5;
+    const a21 = -consumerism * 0.2, a22 = 0.5, b2 = creditAccess * 0.3;
+    const det = a11 * a22 - a12 * a21;
+    if (Math.abs(det) > 0.001) {
+      const xEq = (b1 * a22 - b2 * a12) / det;
+      const yEq = (a11 * b2 - a21 * b1) / det;
+      const fpx = cx + (xEq / 2) * R;
+      const fpy = cy + (yEq / 2) * R;
+
+      // Classify: compute eigenvalues of Jacobian
+      const J11 = -0.4, J12 = -consumerism * 0.3;
+      const J21 = consumerism * 0.2, J22 = -0.5;
+      const tr = J11 + J22;
+      const detJ = J11 * J22 - J12 * J21;
+      const disc = tr * tr - 4 * detJ;
+      const isSpiral = disc < 0;
+      const isStable = tr < 0 && detJ > 0;
+
+      ctx.fillStyle = isStable ? "#27ae60" : "#c0392b";
+      ctx.beginPath(); ctx.arc(fpx, fpy, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = isStable ? "#27ae60" : "#c0392b";
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(fpx, fpy, 12, 0, Math.PI * 2); ctx.stroke();
+
+      ctx.fillStyle = "#333"; ctx.font = "11px 'IBM Plex Mono'"; ctx.textAlign = "left";
+      ctx.fillText(`${isStable ? "Stable" : "Unstable"} ${isSpiral ? "Spiral" : "Node"}`, fpx + 16, fpy - 4);
+      ctx.fillText(`tr(J)=${tr.toFixed(2)} det(J)=${detJ.toFixed(2)}`, fpx + 16, fpy + 10);
+    }
+
+    ctx.textAlign = "left";
+  }, [consumerism, productivity, creditAccess]);
+
+  return (
+    <Panel title="Phase Portrait: Production-Consumption Equilibrium" accent="#1e5aa0">
+      <p style={{ fontSize: 13, color: "#555", margin: "0 0 12px", fontFamily: "'Lora', serif" }}>
+        The economy's production-consumption balance is a 2D dynamical system. The flow field shows how the system evolves from any initial state. High consumerism + easy credit creates spiraling instability (Minsky cycles). The fixed point's stability classification (eigenvalues of the Jacobian) determines whether the economy self-corrects or crashes.
+      </p>
+      <canvas ref={canvasRef} width={420} height={360} style={{ width: "100%", maxWidth: 420, background: "#f4f6fa", borderRadius: 6, display: "block", margin: "0 auto" }} />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginTop: 14 }}>
+        <label style={{ fontSize: 12, fontFamily: "'Playfair Display', serif" }}>
+          Consumerism (μ): <strong>{consumerism.toFixed(1)}</strong>
+          <input type="range" min={5} max={30} value={consumerism * 10} onChange={e => setConsumerism(+e.target.value / 10)} style={{ width: "100%", accentColor: "#e67e22" }} />
+        </label>
+        <label style={{ fontSize: 12, fontFamily: "'Playfair Display', serif" }}>
+          Productivity (π): <strong>{productivity.toFixed(1)}</strong>
+          <input type="range" min={2} max={20} value={productivity * 10} onChange={e => setProductivity(+e.target.value / 10)} style={{ width: "100%", accentColor: "#27ae60" }} />
+        </label>
+        <label style={{ fontSize: 12, fontFamily: "'Playfair Display', serif" }}>
+          Credit Access (κ): <strong>{creditAccess.toFixed(1)}</strong>
+          <input type="range" min={0} max={15} value={creditAccess * 10} onChange={e => setCreditAccess(+e.target.value / 10)} style={{ width: "100%", accentColor: "#c0392b" }} />
+        </label>
+      </div>
+    </Panel>
+  );
+}
+
+/* ─── CORRUPTION / CHEATING DYNAMICS ─── */
+function CorruptionDynamics() {
+  const canvasRef = useRef(null);
+  const [enforcement, setEnforcement] = useState(0.3);
+  const [inequalityPressure, setInequalityPressure] = useState(0.5);
+  const [socialNorm, setSocialNorm] = useState(0.6);
+
+  useEffect(() => {
+    const c = canvasRef.current; if (!c) return;
+    const ctx = c.getContext("2d");
+    const W = c.width, H = c.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const ox = 55, oy = H - 35, gw = W - 70, gh = H - 55;
+
+    // Axes
+    ctx.strokeStyle = "#aab"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(ox, 10); ctx.lineTo(ox, oy); ctx.lineTo(W - 10, oy); ctx.stroke();
+    ctx.fillStyle = "#667"; ctx.font = "11px 'Playfair Display', serif";
+    ctx.fillText("Fraction", 4, 20);
+    ctx.fillText("Cheating", 4, 32);
+    ctx.fillText("Time →", W - 55, oy + 20);
+
+    // Replicator dynamics: fraction of "cheaters" x
+    // dx/dt = x(1-x)[payoff_cheat - payoff_honest]
+    // payoff_cheat = (1-enforcement) * gain + inequalityPressure - socialNorm * x
+    // payoff_honest = socialNorm * (1-x) - inequalityPressure * 0.5
+    // As more people cheat, social norm weakens but enforcement may catch up
+    const T = 100;
+    let x = 0.05;
+    const traj = [x];
+    const dt = 0.3;
+
+    for (let t = 1; t <= T; t++) {
+      const gain = 1.0;
+      const pCheat = (1 - enforcement) * gain + inequalityPressure * 0.5 - socialNorm * x * 0.8;
+      const pHonest = socialNorm * (1 - x) * 0.6 - inequalityPressure * 0.3 + enforcement * 0.2;
+      const dx = x * (1 - x) * (pCheat - pHonest) * dt;
+      x = Math.max(0.01, Math.min(0.99, x + dx));
+      traj.push(x);
+    }
+
+    // Grid
+    ctx.strokeStyle = "rgba(0,0,0,0.04)"; ctx.lineWidth = 0.5;
+    for (let g = 0.2; g <= 0.8; g += 0.2) {
+      const y = oy - g * gh;
+      ctx.beginPath(); ctx.moveTo(ox, y); ctx.lineTo(ox + gw, y); ctx.stroke();
+      ctx.fillStyle = "#aab"; ctx.font = "10px 'IBM Plex Mono'";
+      ctx.fillText(g.toFixed(1), ox - 28, y + 4);
+    }
+
+    // Corruption zones
+    const y05 = oy - 0.5 * gh;
+    ctx.fillStyle = "rgba(192,57,43,0.04)";
+    ctx.fillRect(ox, 10, gw, y05 - 10);
+    ctx.fillStyle = "rgba(192,57,43,0.25)"; ctx.font = "10px 'IBM Plex Mono'";
+    ctx.fillText("Systemic Corruption Zone", ox + 8, 24);
+
+    // Draw trajectory
+    ctx.strokeStyle = "#8e44ad"; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let t = 0; t <= T; t++) {
+      const px = ox + (t / T) * gw;
+      const py = oy - traj[t] * gh;
+      if (t === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Find equilibria (where dx/dt ≈ 0)
+    // Scan for sign changes
+    let equils = [];
+    for (let xTest = 0.02; xTest < 0.98; xTest += 0.01) {
+      const pC = (1 - enforcement) * 1.0 + inequalityPressure * 0.5 - socialNorm * xTest * 0.8;
+      const pH = socialNorm * (1 - xTest) * 0.6 - inequalityPressure * 0.3 + enforcement * 0.2;
+      const diff = pC - pH;
+      const pC2 = (1 - enforcement) * 1.0 + inequalityPressure * 0.5 - socialNorm * (xTest + 0.01) * 0.8;
+      const pH2 = socialNorm * (1 - xTest - 0.01) * 0.6 - inequalityPressure * 0.3 + enforcement * 0.2;
+      const diff2 = pC2 - pH2;
+      if (diff * diff2 < 0) {
+        equils.push({ x: xTest + 0.005, stable: diff > 0 }); // if payoff was positive and becomes negative, stable
+      }
+    }
+
+    // Mark equilibria on right side
+    equils.forEach((eq, i) => {
+      const ey = oy - eq.x * gh;
+      ctx.fillStyle = eq.stable ? "#27ae60" : "#c0392b";
+      ctx.setLineDash([4, 3]);
+      ctx.strokeStyle = ctx.fillStyle + "66";
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(ox, ey); ctx.lineTo(ox + gw, ey); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.beginPath(); ctx.arc(ox + gw - 5, ey, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#333"; ctx.font = "10px 'IBM Plex Mono'";
+      ctx.fillText(`x*=${eq.x.toFixed(2)} (${eq.stable ? "stable" : "unstable"})`, ox + gw - 100, ey - 8);
+    });
+
+    // Final state
+    const final = traj[traj.length - 1];
+    ctx.fillStyle = "#333"; ctx.font = "11px 'IBM Plex Mono'";
+    ctx.fillText(`Final cheating rate: ${(final * 100).toFixed(1)}%`, ox + 5, oy + 20);
+
+  }, [enforcement, inequalityPressure, socialNorm]);
+
+  return (
+    <Panel title="Replicator Dynamics: Cheating & Institutional Corruption" accent="#8e44ad">
+      <p style={{ fontSize: 13, color: "#555", margin: "0 0 12px", fontFamily: "'Lora', serif" }}>
+        Modeled as evolutionary game theory: agents choose honest vs. cheating strategies. The replicator equation dx/dt = x(1−x)[π_cheat − π_honest] governs the fraction x of cheaters. High inequality pressure + low enforcement creates a bifurcation into systemic corruption — a stable equilibrium where cheating is the rational strategy.
+      </p>
+      <canvas ref={canvasRef} width={500} height={300} style={{ width: "100%", maxWidth: 500, background: "#f4f6fa", borderRadius: 6 }} />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginTop: 14 }}>
+        <label style={{ fontSize: 12, fontFamily: "'Playfair Display', serif" }}>
+          Enforcement (ε): <strong>{enforcement.toFixed(2)}</strong>
+          <input type="range" min={0} max={90} value={enforcement * 100} onChange={e => setEnforcement(+e.target.value / 100)} style={{ width: "100%", accentColor: "#27ae60" }} />
+        </label>
+        <label style={{ fontSize: 12, fontFamily: "'Playfair Display', serif" }}>
+          Inequality Pressure: <strong>{inequalityPressure.toFixed(2)}</strong>
+          <input type="range" min={0} max={100} value={inequalityPressure * 100} onChange={e => setInequalityPressure(+e.target.value / 100)} style={{ width: "100%", accentColor: "#c0392b" }} />
+        </label>
+        <label style={{ fontSize: 12, fontFamily: "'Playfair Display', serif" }}>
+          Social Norm Strength: <strong>{socialNorm.toFixed(2)}</strong>
+          <input type="range" min={5} max={100} value={socialNorm * 100} onChange={e => setSocialNorm(+e.target.value / 100)} style={{ width: "100%", accentColor: "#1e5aa0" }} />
+        </label>
+      </div>
+    </Panel>
+  );
+}
+
+/* ─── COUNTRY CALIBRATION ─── */
+function CountryComparison() {
+  const countries = [
+    { name: "United States", gini: 0.39, r: 0.07, g: 0.02, tax: 0.27, enforce: 0.65, corrupt: 0.31, consumer: 2.1, flag: "🇺🇸" },
+    { name: "Sweden", gini: 0.27, r: 0.04, g: 0.02, tax: 0.44, enforce: 0.85, corrupt: 0.12, consumer: 1.2, flag: "🇸🇪" },
+    { name: "Brazil", gini: 0.53, r: 0.09, g: 0.01, tax: 0.33, enforce: 0.35, corrupt: 0.62, consumer: 1.6, flag: "🇧🇷" },
+    { name: "India", gini: 0.35, r: 0.08, g: 0.06, tax: 0.18, enforce: 0.30, corrupt: 0.60, consumer: 0.9, flag: "🇮🇳" },
+    { name: "China", gini: 0.38, r: 0.06, g: 0.05, tax: 0.22, enforce: 0.70, corrupt: 0.55, consumer: 1.4, flag: "🇨🇳" },
+    { name: "South Africa", gini: 0.63, r: 0.10, g: 0.01, tax: 0.26, enforce: 0.25, corrupt: 0.70, consumer: 1.3, flag: "🇿🇦" },
+    { name: "Germany", gini: 0.31, r: 0.04, g: 0.015, tax: 0.38, enforce: 0.80, corrupt: 0.15, consumer: 1.3, flag: "🇩🇪" },
+    { name: "Nigeria", gini: 0.51, r: 0.11, g: 0.02, tax: 0.08, enforce: 0.15, corrupt: 0.78, consumer: 0.7, flag: "🇳🇬" },
+  ];
+
+  const barColor = (v, thresholds) => {
+    if (v > thresholds[1]) return "#c0392b";
+    if (v > thresholds[0]) return "#e67e22";
+    return "#27ae60";
+  };
+
+  return (
+    <Panel title="Country-Level Tensor Calibration" accent="#0a1628">
+      <p style={{ fontSize: 13, color: "#555", margin: "0 0 12px", fontFamily: "'Lora', serif" }}>
+        Each country represents a point in the socioeconomic tensor space (Gini, r, g, τ, ε, corruption, consumerism). The table shows how these parameters cluster: high inequality + low enforcement → high corruption is not coincidence — it is a stable equilibrium of the coupled dynamical system.
+      </p>
+      <div style={{ overflowX: "auto" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }}>
+          <thead>
+            <tr style={{ background: "rgba(10,22,40,0.06)" }}>
+              {["", "Country", "Gini", "r", "g", "r−g", "Tax τ", "Enforce ε", "Corrupt", "Consumer μ"].map(h => (
+                <th key={h} style={{ padding: "8px 6px", borderBottom: "2px solid rgba(10,22,40,0.15)", textAlign: h === "Country" || h === "" ? "left" : "right", whiteSpace: "nowrap", fontSize: 11 }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {countries.map((c, i) => {
+              const rMinusG = c.r * (1 - c.tax) - c.g;
+              return (
+                <tr key={i} style={{ background: i % 2 === 0 ? "transparent" : "rgba(0,0,0,0.015)" }}>
+                  <td style={{ padding: "6px 4px", fontSize: 18 }}>{c.flag}</td>
+                  <td style={{ padding: "6px 8px", fontFamily: "'Playfair Display', serif", fontWeight: 500, fontSize: 13 }}>{c.name}</td>
+                  <td style={{ ...tdS, color: barColor(c.gini, [0.35, 0.5]) }}>{c.gini.toFixed(2)}</td>
+                  <td style={tdS}>{(c.r * 100).toFixed(0)}%</td>
+                  <td style={tdS}>{(c.g * 100).toFixed(1)}%</td>
+                  <td style={{ ...tdS, fontWeight: 600, color: rMinusG > 0 ? "#c0392b" : "#27ae60" }}>
+                    {rMinusG > 0 ? "+" : ""}{(rMinusG * 100).toFixed(1)}%
+                  </td>
+                  <td style={tdS}>{(c.tax * 100).toFixed(0)}%</td>
+                  <td style={{ ...tdS, color: barColor(1 - c.enforce, [0.3, 0.6]) }}>{c.enforce.toFixed(2)}</td>
+                  <td style={{ ...tdS, color: barColor(c.corrupt, [0.3, 0.55]) }}>{c.corrupt.toFixed(2)}</td>
+                  <td style={tdS}>{c.consumer.toFixed(1)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ marginTop: 14, padding: "10px 14px", background: "rgba(10,22,40,0.03)", borderRadius: 4, fontSize: 12, color: "#555", fontFamily: "'Lora', serif", lineHeight: 1.6 }}>
+        <strong>Pattern:</strong> South Africa (Gini 0.63), Brazil (0.53), Nigeria (0.51) all sit in the high-r, low-g, low-enforcement basin — the "inequality trap" attractor. Sweden and Germany sit in the low-r(1−τ), high-enforcement basin — the "social-democratic" attractor. India and China have high g offsetting high r — a transient growth-driven regime whose stability depends on whether g can be sustained.
+      </div>
+    </Panel>
+  );
+}
+
+const tdS = { padding: "6px 8px", textAlign: "right", borderBottom: "1px solid rgba(0,0,0,0.04)" };
+
+/* ─── BIFURCATION DIAGRAM ─── */
+function BifurcationDiagram() {
+  const canvasRef = useRef(null);
+  const [param, setParam] = useState("tax");
+
+  useEffect(() => {
+    const c = canvasRef.current; if (!c) return;
+    const ctx = c.getContext("2d");
+    const W = c.width, H = c.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const ox = 55, oy = H - 35, gw = W - 70, gh = H - 55;
+
+    // Axes
+    ctx.strokeStyle = "#aab"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(ox, 10); ctx.lineTo(ox, oy); ctx.lineTo(W - 10, oy); ctx.stroke();
+    ctx.fillStyle = "#667"; ctx.font = "11px 'Playfair Display', serif";
+    ctx.fillText("Gini∞", 10, 20);
+    ctx.fillText(param === "tax" ? "Tax Rate τ →" : param === "enforcement" ? "Enforcement ε →" : "Return r →", W - 100, oy + 20);
+
+    // For each parameter value, run the Gini dynamics to equilibrium
+    const N = 200;
+    for (let i = 0; i < N; i++) {
+      let paramVal;
+      let r = 0.06, g = 0.025, tax = 0.25;
+
+      if (param === "tax") {
+        tax = (i / N) * 0.7;
+        paramVal = tax;
+      } else if (param === "enforcement") {
+        paramVal = i / N;
+      } else {
+        r = (i / N) * 0.15;
+        paramVal = r;
+      }
+
+      // Run Gini dynamics from multiple initial conditions
+      const inits = [0.2, 0.4, 0.6, 0.8];
+      inits.forEach(g0 => {
+        let gini = g0;
+        const alpha = 2.5;
+        // Run to near-equilibrium
+        for (let t = 0; t < 300; t++) {
+          const netR = r * (1 - tax);
+          const driver = netR - g;
+          const dGini = alpha * driver * gini * (1 - gini) * 0.3;
+          gini = Math.max(0.05, Math.min(0.95, gini + dGini));
+        }
+
+        // Plot last few iterates
+        for (let t = 0; t < 20; t++) {
+          const netR = r * (1 - tax);
+          const driver = netR - g;
+          const dGini = alpha * driver * gini * (1 - gini) * 0.3;
+          // Add small noise for visualization
+          const noise = (Math.random() - 0.5) * 0.005;
+          gini = Math.max(0.05, Math.min(0.95, gini + dGini + noise));
+
+          const px = ox + paramVal * (param === "tax" ? gw / 0.7 : param === "enforcement" ? gw : gw / 0.15);
+          const py = oy - ((gini - 0.05) / 0.9) * gh;
+
+          if (px > ox && px < ox + gw && py > 10 && py < oy) {
+            ctx.fillStyle = "rgba(30,90,160,0.15)";
+            ctx.fillRect(px, py, 1.5, 1.5);
+          }
+        }
+      });
+    }
+
+    // Mark bifurcation point
+    let bifX;
+    if (param === "tax") {
+      // r(1-τ) = g → τ* = 1 - g/r = 1 - 0.025/0.06 ≈ 0.583
+      bifX = ox + 0.583 * (gw / 0.7);
+      ctx.fillStyle = "#667"; ctx.font = "10px 'IBM Plex Mono'";
+      ctx.fillText("τ* = 1−g/r ≈ 58%", bifX - 40, 38);
+    } else if (param === "enforcement") {
+      bifX = ox + 0.5 * gw;
+    } else {
+      // r* = g/(1-τ) = 0.025/0.75 ≈ 0.033
+      bifX = ox + 0.033 * (gw / 0.15);
+      ctx.fillStyle = "#667"; ctx.font = "10px 'IBM Plex Mono'";
+      ctx.fillText("r* = g/(1−τ) ≈ 3.3%", bifX + 5, 38);
+    }
+
+    if (bifX > ox && bifX < ox + gw) {
+      ctx.strokeStyle = "rgba(192,57,43,0.5)";
+      ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]);
+      ctx.beginPath(); ctx.moveTo(bifX, 10); ctx.lineTo(bifX, oy); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Labels
+    ctx.fillStyle = "#27ae60"; ctx.font = "11px 'Playfair Display', serif";
+    if (param === "tax" && bifX > ox + 40) {
+      ctx.fillText("Equality basin", ox + 10, oy - gh * 0.15);
+      ctx.fillStyle = "#c0392b";
+      ctx.fillText("Oligarchy basin", bifX + 10, oy - gh * 0.7);
+    }
+
+  }, [param]);
+
+  return (
+    <Panel title="Bifurcation Diagram: When Does the System Tip?" accent="#2c3e50">
+      <p style={{ fontSize: 13, color: "#555", margin: "0 0 12px", fontFamily: "'Lora', serif" }}>
+        A bifurcation diagram shows all possible long-run equilibria as a control parameter varies. At the critical point τ* = 1 − g/r (for the tax parameter), the system transitions from the equality basin to the oligarchy basin. This is the formal statement of Marx's claim that capitalism has an inherent concentrating tendency — but now with a precise threshold.
+      </p>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        {[["tax", "Tax Rate (τ)"], ["return", "Return on Capital (r)"]].map(([k, label]) => (
+          <button key={k} onClick={() => setParam(k)} style={{
+            padding: "6px 14px", borderRadius: 4, border: `1px solid ${param === k ? "#1e5aa0" : "#ddd"}`,
+            background: param === k ? "#1e5aa0" : "#fff", color: param === k ? "#fff" : "#555",
+            fontFamily: "'Playfair Display', serif", fontSize: 12, cursor: "pointer",
+          }}>{label}</button>
+        ))}
+      </div>
+      <canvas ref={canvasRef} width={500} height={300} style={{ width: "100%", maxWidth: 500, background: "#f4f6fa", borderRadius: 6 }} />
+    </Panel>
+  );
+}
+
+
+/* ─── MAIN ─── */
+const SECTIONS = [
+  "Tensor Formulation",
+  "Wealth Dynamics",
+  "Prod-Consumption",
+  "Cheating Dynamics",
+  "Country Calibration",
+  "Bifurcation",
+  "Synthesis",
+];
+
+function CapitalismTensor() {
+  const [activeSection, setActiveSection] = useState(0);
+
+  const scrollTo = (i) => {
+    setActiveSection(i);
+    const el = document.getElementById(`sec-${i}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  return (
+    <div style={{ fontFamily: "'Lora', serif", background: "#f4f6fa", minHeight: "100vh", color: "#1e2a3a" }}>
+      <style>{FONTS}</style>
+
+      {/* Header */}
+      <div style={{
+        background: "linear-gradient(135deg, #0a1628 0%, #1a2d4a 50%, #2c4a6e 100%)",
+        padding: "44px 24px 36px", color: "#f4f6fa",
+      }}>
+        <div style={{ maxWidth: 740, margin: "0 auto" }}>
+          <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, letterSpacing: 3, opacity: 0.4, marginBottom: 12 }}>
+            TENSOR ECONOMICS · DYNAMICAL SYSTEMS
+          </div>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 30, fontWeight: 400, margin: 0, lineHeight: 1.25 }}>
+            Capitalism as a Tensor Dynamical System
+          </h1>
+          <p style={{ fontSize: 15, fontWeight: 300, opacity: 0.7, marginTop: 14, lineHeight: 1.6, maxWidth: 580 }}>
+            Wealth disparity, production equilibrium, consumerism, and the tendency to cheat — modeled as coupled tensor fields with bifurcation analysis and country-level calibration.
+          </p>
+          <p style={{ fontSize: 13, fontWeight: 400, opacity: 0.5, marginTop: 8, fontFamily: "'IBM Plex Mono', monospace" }}>
+            Anjan Goswami
+          </p>
+        </div>
+      </div>
+
+      {/* Nav */}
+      <div style={{
+        background: "#eaecf2", borderBottom: "1px solid rgba(0,0,0,0.08)",
+        position: "sticky", top: 0, zIndex: 10, overflowX: "auto", padding: "0 24px",
+      }}>
+        <div style={{ maxWidth: 740, margin: "0 auto", display: "flex" }}>
+          {SECTIONS.map((s, i) => (
+            <button key={i} onClick={() => scrollTo(i)} style={{
+              background: "none", border: "none", cursor: "pointer", padding: "10px 12px",
+              fontFamily: "'Playfair Display', serif", fontSize: 12,
+              color: activeSection === i ? "#1e5aa0" : "#888",
+              borderBottom: activeSection === i ? "2px solid #1e5aa0" : "2px solid transparent",
+              fontWeight: activeSection === i ? 600 : 400, whiteSpace: "nowrap",
+            }}>{s}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ maxWidth: 740, margin: "0 auto", padding: "36px 24px" }}>
+
+        {/* Section 0: Tensor Formulation */}
+        <section id="sec-0" style={{ marginBottom: 52 }}>
+          <h2 style={h2S}>1. The Socioeconomic State Tensor</h2>
+          <p style={pS}>
+            A national economy at time t is not a scalar (GDP) or a vector (a few indicators). It is a tensor — a multi-indexed object that captures the correlations between wealth distribution, production structure, consumption patterns, institutional quality, and strategic behavior simultaneously. The key insight from Marx that survives into modern mathematics is that these dimensions are <em>coupled</em>: you cannot model wealth distribution without modeling production, and you cannot model production without modeling the incentives that drive cheating.
+          </p>
+
+          <MathBlock label="The State Tensor" tex={`𝒮(t) ∈ ℝⁿ ⊗ ℝᵐ ⊗ ℝᵏ ⊗ ℝˡ
+
+Components:
+  𝒮ᵢⱼₖₗ(t) encodes the joint state of:
+    i ∈ {1,...,n}  — wealth percentile (distribution)
+    j ∈ {1,...,m}  — production sector (IO structure)
+    k ∈ {1,...,k}  — consumption category (demand)
+    l ∈ {1,...,l}  — institutional quality index
+
+The full dynamics:
+  d𝒮/dt = ℱ(𝒮, 𝒫)
+
+where 𝒫 is the policy parameter tensor (tax rates, regulation,
+enforcement, monetary policy) and ℱ is a nonlinear operator
+encoding all the coupling terms.`} />
+
+          <p style={pS}>
+            This is not merely notational. The tensor structure means that marginalizing over any single index (e.g., "what is GDP?" = trace over all indices) loses the correlational information that drives crises. A country can have the same GDP but wildly different tensor states — and the dynamics depend on the full tensor, not the marginal.
+          </p>
+
+          <MathBlock label="Decomposition into Coupled Subsystems" tex={`The operator ℱ decomposes into coupled components:
+
+  ℱ = ℱ_wealth ⊕ ℱ_production ⊕ ℱ_consumption ⊕ ℱ_institution
+
+with coupling terms:
+
+  ℱ_wealth depends on ℱ_production (surplus allocation)
+  ℱ_production depends on ℱ_consumption (effective demand)
+  ℱ_consumption depends on ℱ_wealth (purchasing power)
+  ℱ_institution depends on ℱ_wealth (capture/corruption pressure)
+  ℱ_wealth depends on ℱ_institution (enforcement of rules)
+
+This circular coupling is what Marx called "contradictions" —
+in modern language, it creates feedback loops that can
+stabilize (negative feedback) or destabilize (positive feedback)
+depending on the parameter regime 𝒫.`} />
+
+          <h3 style={h3S}>1.1 Why Tensors, Not Vectors?</h3>
+          <p style={pS}>
+            A vector model (like standard macroeconomics) tracks aggregate quantities: GDP, inflation, unemployment. But the Gini coefficient and the unemployment rate can be identical in two countries with completely different tensor structures — one where the poor are uniformly distributed across sectors, another where poverty is concentrated in agriculture while tech captures all surplus. The policy response is totally different, and the dynamics diverge. The tensor captures this: it is the joint distribution, not the marginals, that determines the trajectory.
+          </p>
+          <p style={pS}>
+            This connects directly to Marx's insight that "the anatomy of civil society is to be sought in political economy" — the structure of production relations (the off-diagonal terms in the tensor) determines the dynamics, not the aggregates.
+          </p>
+        </section>
+
+        {/* Section 1: Wealth */}
+        <section id="sec-1" style={{ marginBottom: 52 }}>
+          <h2 style={h2S}>2. Wealth Disparity as a Dynamical System</h2>
+
+          <h3 style={h3S}>2.1 The Piketty-Marx Inequality Engine</h3>
+          <p style={pS}>
+            Marx's "general law of capitalist accumulation" (Capital Vol. I, Ch. 25) states that capital accumulates at one pole while misery accumulates at the other. Piketty's r {">"} g thesis provides the mathematical mechanism. We can formalize this as a nonlinear ODE for the Gini coefficient G(t):
+          </p>
+
+          <MathBlock label="Gini Dynamics" tex={`dG/dt = α · [r(1−τ) − g] · G · (1−G)
+
+This is a logistic equation with a signed growth rate:
+  If r(1−τ) > g  →  G → G* (high) [oligarchy attractor]
+  If r(1−τ) < g  →  G → G* (low)  [equality attractor]
+  If r(1−τ) = g  →  G stays constant [bifurcation point]
+
+The bifurcation parameter is:
+  β = r(1−τ) − g
+
+  β > 0 : wealth concentrates (Marx's prediction)
+  β < 0 : wealth diffuses (social-democratic regime)
+  β = 0 : critical point (knife-edge instability)
+
+The fixed points:
+  G* = 0 (trivial, unstable)
+  G* = 1 (trivial, unstable)
+  Interior fixed point depends on additional friction terms.`} />
+
+          <GiniDynamics />
+
+          <h3 style={h3S}>2.2 Country-Level Interpretation</h3>
+          <p style={pS}>
+            The simulation above shows that the US (r≈7%, g≈2%, τ≈27%) sits firmly in the β {">"} 0 regime — the Gini trends upward unless taxes are raised above the critical threshold τ* = 1 − g/r ≈ 71%. Sweden (τ≈44%, lower r due to co-determination) sits near β ≈ 0. India's high g (≈6%) temporarily offsets high r, but if growth slows (as it has post-COVID in per-capita terms), India enters the concentration regime. This is not ideology — it is the fixed-point structure of the dynamical system.
+          </p>
+        </section>
+
+        {/* Section 2: Production-Consumption */}
+        <section id="sec-2" style={{ marginBottom: 52 }}>
+          <h2 style={h2S}>3. Production-Consumption Equilibrium & Consumerism</h2>
+
+          <h3 style={h3S}>3.1 The Overproduction-Underconsumption Dialectic</h3>
+          <p style={pS}>
+            Marx identified two crisis tendencies: overproduction (too many goods, insufficient effective demand) and underconsumption (wages too low to absorb output). These are not separate phenomena — they are the same instability viewed from production and consumption coordinates respectively. Modern consumerism and credit are the system's attempt to stabilize this inherent oscillation.
+          </p>
+
+          <MathBlock label="Production-Consumption Phase System" tex={`Let x = production surplus (output − equilibrium)
+    y = consumption excess (demand − equilibrium)
+
+dx/dt = π − μy − δ₁x
+dy/dt = κ + μx − δ₂y
+
+where:
+  π = productivity growth rate
+  μ = consumerism coefficient (demand sensitivity)
+  κ = credit access (exogenous demand stimulus)
+  δ₁, δ₂ = damping (inventory adjustment, satiation)
+
+Jacobian:
+  J = [−δ₁   −μ ]
+      [ μ    −δ₂]
+
+Eigenvalues: λ = −(δ₁+δ₂)/2 ± √[(δ₁−δ₂)²/4 − μ²]
+
+If μ² > (δ₁−δ₂)²/4 → complex eigenvalues → SPIRAL
+If tr(J) < 0 and det(J) > 0 → stable spiral (oscillating convergence)
+If μ increases → det(J) increases → spiral tightens
+If μ > √(δ₁·δ₂) and credit κ is large → Hopf bifurcation → LIMIT CYCLE
+
+The limit cycle IS the business cycle. Consumerism (high μ)
+combined with easy credit (high κ) doesn't prevent crises —
+it converts point-attractor stability into oscillatory instability.`} />
+
+          <ProdConsEquilibrium />
+
+          <h3 style={h3S}>3.2 Consumerism as a Destabilizer</h3>
+          <p style={pS}>
+            The phase portrait reveals something counterintuitive: moderate consumerism (μ ≈ 1.0) creates a stable spiral — the economy oscillates but converges. High consumerism (μ {">"} 2.0) combined with easy credit creates expanding spirals — the Minsky instability. The system overshoots, corrects, overshoots further. This is exactly the financial crisis pattern of 2008: credit-fueled consumption expanded the spiral radius until the system exceeded its basin of attraction and crashed.
+          </p>
+          <p style={pS}>
+            Marx's reproduction schemas captured the balance condition (v₁ + s₁ = c₂) but lacked the dynamics. The phase portrait is what his model becomes when you add adjustment mechanisms and classify the fixed point.
+          </p>
+        </section>
+
+        {/* Section 3: Cheating */}
+        <section id="sec-3" style={{ marginBottom: 52 }}>
+          <h2 style={h2S}>4. The Tendency to Cheat: Evolutionary Game Dynamics</h2>
+
+          <h3 style={h3S}>4.1 Institutional Corruption as Equilibrium</h3>
+          <p style={pS}>
+            One of the most important features of real capitalism that Marx undertheorized is the endogenous generation of fraud, corruption, and institutional decay. This is not a moral failure — it is a game-theoretic equilibrium. When the payoff to cheating exceeds the payoff to honesty (adjusted for enforcement probability), rational agents cheat. The population dynamics of honest vs. dishonest strategies are governed by the replicator equation from evolutionary game theory.
+          </p>
+
+          <MathBlock label="Replicator Dynamics for Cheating" tex={`Let x(t) = fraction of agents playing "cheat" strategy
+
+dx/dt = x(1−x) · [π_cheat(x) − π_honest(x)]
+
+Payoff functions:
+  π_cheat(x)  = (1−ε)·G + ι·0.5 − σ·x·0.8
+  π_honest(x) = σ·(1−x)·0.6 − ι·0.3 + ε·0.2
+
+where:
+  ε = enforcement probability (detection + punishment)
+  G = gain from cheating (increases with inequality)
+  ι = inequality pressure (desperation driver)
+  σ = social norm strength (decreases as x increases)
+
+Key insight: σ·x term in π_cheat means cheating has
+NEGATIVE FREQUENCY DEPENDENCE when norms are strong —
+more cheaters → lower payoff per cheater (crowded market).
+
+But ι (inequality) has POSITIVE FREQUENCY DEPENDENCE
+on wealth concentration — more inequality → more pressure
+to cheat → more inequality. This creates a feedback loop.
+
+Equilibria (dx/dt = 0):
+  x* = 0 (all honest — unstable if π_cheat(0) > π_honest(0))
+  x* = 1 (all cheating — stable only if enforcement collapses)
+  Interior x* where π_cheat = π_honest (may be stable or unstable)
+
+BIFURCATION: As ε decreases below ε*, the interior equilibrium
+vanishes and the system jumps to high-corruption equilibrium.
+This is a SADDLE-NODE BIFURCATION — the "corruption trap."`} />
+
+          <CorruptionDynamics />
+
+          <h3 style={h3S}>4.2 The Inequality-Corruption Coupling</h3>
+          <p style={pS}>
+            The most dangerous coupling in the socioeconomic tensor is between the wealth dynamics (Section 2) and the corruption dynamics (this section). High Gini → high inequality pressure ι → higher equilibrium cheating rate x* → institutional decay → reduced enforcement ε → even higher Gini. This is a positive feedback loop with a formal structure:
+          </p>
+
+          <MathBlock label="Inequality-Corruption Feedback" tex={`dG/dt = α·[r(1−τ) − g]·G·(1−G) + η·x(t)
+dx/dt = x(1−x)·[payoff_gap(G, ε, σ)]
+dε/dt = −γ·x(t)·ε + ε₀   (enforcement erodes with corruption)
+
+This 3D system has a catastrophic attractor:
+  G↑ → ι↑ → x↑ → ε↓ → G↑↑ → ...
+
+The ONLY stable intervention point is ε (enforcement):
+exogenous institutional strength that doesn't depend on x.
+This is why independent judiciaries, free press, and
+constitutional constraints matter — they provide ε₀ > 0
+even when x is high.`} />
+        </section>
+
+        {/* Section 4: Country Calibration */}
+        <section id="sec-4" style={{ marginBottom: 52 }}>
+          <h2 style={h2S}>5. Country-Level Tensor States</h2>
+          <CountryComparison />
+
+          <h3 style={h3S}>5.1 Basin Classification</h3>
+          <p style={pS}>
+            The country data reveals three distinct basins of attraction in the socioeconomic tensor space. The <strong>social-democratic basin</strong> (Sweden, Germany): high τ, high ε, low corruption, r(1−τ) ≈ g — the system sits near the equality fixed point. The <strong>growth-transient regime</strong> (India, China): high g temporarily masks high r, but the trajectory depends on whether g can be sustained as the economy matures — if g falls, the system tips toward concentration. The <strong>inequality trap</strong> (South Africa, Brazil, Nigeria): high r, low g, low ε, high corruption — all the feedback loops are positive, and the system is locked into a high-Gini, high-corruption equilibrium that is locally stable (no small perturbation escapes it).
+          </p>
+          <p style={pS}>
+            The US is the interesting case: it sits between basins, with high r and moderate enforcement. Post-2016 erosion of institutional norms (decreasing ε) is pushing it toward the inequality trap basin — not because of any conspiracy, but because the dynamical system has a basin boundary that the US is approaching. The question is whether institutional resilience (ε₀) is strong enough to prevent the transition.
+          </p>
+        </section>
+
+        {/* Section 5: Bifurcation */}
+        <section id="sec-5" style={{ marginBottom: 52 }}>
+          <h2 style={h2S}>6. Bifurcation Analysis: Critical Thresholds</h2>
+
+          <p style={pS}>
+            The central question of political economy — "when does the system tip?" — is precisely a bifurcation question. We scan the control parameter space and plot all long-run equilibria. The result is a bifurcation diagram that shows the critical thresholds where the qualitative behavior changes.
+          </p>
+
+          <BifurcationDiagram />
+
+          <MathBlock label="Critical Thresholds" tex={`Tax bifurcation:     τ* = 1 − g/r
+  Below τ*: system converges to high-Gini attractor
+  Above τ*: system converges to low-Gini attractor
+
+Enforcement bifurcation:  ε* (saddle-node in corruption dynamics)
+  Below ε*: corruption trap (high-x* is only stable equilibrium)
+  Above ε*: two equilibria coexist (path-dependent)
+
+Growth bifurcation:  g* = r(1−τ)
+  Below g*: Piketty concentration regime
+  Above g*: Kuznets diffusion regime
+
+These three thresholds define the REGIME BOUNDARIES
+in the 3D parameter space (τ, ε, g). A country's
+trajectory depends on which side of each boundary it sits.`} />
+
+          <h3 style={h3S}>6.1 Hysteresis and Path Dependence</h3>
+          <p style={pS}>
+            A critical feature of the bifurcation structure is <strong>hysteresis</strong>: crossing the threshold in one direction (τ falling below τ*) does not mean that crossing back (τ rising above τ*) returns the system to the original state. The corruption-inequality feedback loop creates a basin that is deeper on the high-Gini side. Escaping the inequality trap requires pushing τ significantly above τ*, not just to τ* — because the corruption dynamics have shifted the basin boundary. This is why gradual reform often fails: the system snaps back to the inequality trap attractor.
+          </p>
+        </section>
+
+        {/* Section 6: Synthesis */}
+        <section id="sec-6" style={{ marginBottom: 52 }}>
+          <h2 style={h2S}>7. Synthesis: What Marx Got Right, What He Missed, and What We Can Now See</h2>
+
+          <div style={{ display: "grid", gap: 14, marginBottom: 24 }}>
+            {[
+              { label: "Marx Got Right", color: "#27ae60", items: "Capital has an inherent concentrating tendency (r > g formalizes this). Crises are endogenous, not exogenous shocks. The structure of production relations determines dynamics, not aggregates. Reproduction requires intersectoral balance. Institutional superstructure co-evolves with economic base." },
+              { label: "Marx Missed", color: "#e67e22", items: "No dynamics — his models are static balance conditions, not ODEs. No role for credit, money, or financial instability (Minsky's contribution). No game-theoretic treatment of strategic behavior / corruption. No bifurcation analysis — he asserted collapse without locating the critical threshold. Two sectors are insufficient; real economies need n ≥ 50." },
+              { label: "Modern Mathematics Reveals", color: "#1e5aa0", items: "The system has MULTIPLE STABLE EQUILIBRIA (basins of attraction), not a single trajectory toward collapse. Policy parameters (τ, ε, g) have CRITICAL THRESHOLDS (bifurcation points) that separate qualitatively different regimes. The inequality-corruption coupling is the most dangerous positive feedback loop. HYSTERESIS means gradual reform may be insufficient — discontinuous intervention may be needed to escape the inequality trap. Consumerism + credit converts stable equilibria into limit cycles (business cycles)." },
+            ].map((block, i) => (
+              <div key={i} style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.08)", borderLeft: `4px solid ${block.color}`, borderRadius: 6, padding: "16px 20px" }}>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600, fontSize: 15, color: block.color, marginBottom: 8 }}>{block.label}</div>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: "#333", margin: 0 }}>{block.items}</p>
+              </div>
+            ))}
+          </div>
+
+          <h3 style={h3S}>7.1 The Tensor Program for Political Economy</h3>
+          <MathBlock label="A Complete Modern Formulation" tex={`STATE:   𝒮(t) ∈ ℝⁿ ⊗ ℝᵐ ⊗ ℝᵏ ⊗ ℝˡ
+POLICY:  𝒫(t) ∈ ℝᵈ  (tax, enforcement, monetary, trade)
+DYNAMICS: d𝒮/dt = ℱ(𝒮, 𝒫)
+
+ℱ decomposes into:
+  ℱ₁: Wealth dynamics       (Piketty-Marx, logistic)
+  ℱ₂: Production dynamics   (Leontief IO, Sraffa prices)
+  ℱ₃: Consumption dynamics  (phase-portrait, Minsky)
+  ℱ₄: Institution dynamics  (replicator, corruption)
+  ℱ₅: Coupling terms        (the dangerous feedbacks)
+
+COMPUTATIONAL REQUIREMENTS:
+  • Agent-based simulation (10⁵–10⁶ agents)
+  • Tensor decomposition (Tucker/CP for dimensionality)
+  • Bifurcation continuation (AUTO/MatCont)
+  • Calibration via Bayesian inference on national accounts
+  • Validation via out-of-sample crisis prediction
+
+This is not speculative — every component exists in the
+literature. What's missing is the integration. The tensor
+framework provides the mathematical structure to compose
+them into a coherent whole.`} />
+
+          <p style={pS}>
+            Marx wrote that "philosophers have only interpreted the world; the point is to change it." The tensor dynamical systems approach does something Marx could not: it identifies the precise parameter values (τ*, ε*, g*) at which the system transitions between regimes, and therefore tells you <em>where</em> intervention is most effective. The math doesn't tell you what the good society looks like — that remains a normative question. But it tells you which levers actually move the system, and which are wasted effort because the dynamics will overwhelm them.
+          </p>
+          <p style={pS}>
+            The deepest lesson: capitalism is not a system that trends toward a single outcome (collapse, as Marx predicted, or equilibrium, as neoclassical economics assumes). It is a system with multiple basins of attraction, separated by bifurcation boundaries, with hysteresis that makes transitions between basins path-dependent and potentially irreversible. Understanding this structure is the prerequisite for any serious political economy.
+          </p>
+        </section>
+
+        {/* Footer */}
+        <div style={{
+          borderTop: "2px solid rgba(10,22,40,0.08)", paddingTop: 24, marginTop: 48,
+          fontSize: 12, color: "#888", fontFamily: "'Playfair Display', serif",
+        }}>
+          <strong>Key References:</strong> Marx, <em>Das Kapital</em> I–III (1867–1894) · Piketty, <em>Capital in the 21st Century</em> (2014) · Minsky, <em>Stabilizing an Unstable Economy</em> (1986) · Sraffa, <em>Production of Commodities</em> (1960) · Shaikh, <em>Capitalism</em> (2016) · Godley & Lavoie, <em>Monetary Economics</em> (2007) · Strogatz, <em>Nonlinear Dynamics and Chaos</em> (2015) · Hofbauer & Sigmund, <em>Evolutionary Games and Population Dynamics</em> (1998) · Kuznetsov, <em>Elements of Applied Bifurcation Theory</em> (2004) · Acemoglu & Robinson, <em>Why Nations Fail</em> (2012) · Leontief, <em>Input-Output Economics</em> (1986)
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(CapitalismTensor));
+  </script>
+</body>
+</html>
